@@ -334,53 +334,41 @@ function TabZasto() {
 }
 
 // ═══════════════════════════════════════════
-// TAB 4 — Literatura & Prezentacije
+// TAB 4 — Literatura
 // ═══════════════════════════════════════════
 function TabLiteratura() {
-  const resources = [
-    { cat: "Akademski izvori", items: [
-      { title: "EBSCO baza podataka", desc: "Pristup akademskim člancima o poduzetništvu i izradi biznis planova.", link: "#" },
-      { title: "Univerzitetska biblioteka FINRA", desc: "Dostupna literatura iz oblasti menadžmenta i poslovnog planiranja.", link: "#" },
-      { title: "Akademski časopisi", desc: "Recenzirani članci o poslovnom planiranju i strategijskom menadžmentu.", link: "#" },
-    ]},
-    { cat: "Praktični resursi", items: [
-      { title: "Templejti biznis planova", desc: "Popunjeni primjeri biznis planova kao inspiracija za vlastiti rad.", link: "#" },
-      { title: "Tabele finansijskog plana", desc: "Excel tabele za investicije, amortizaciju, otplatni plan kredita i bilanse.", link: "#" },
-      { title: "Odradjeni biznis planovi studenata", desc: "Realni primjeri studentskih biznis planova sa prethodnih generacija.", link: "#" },
-    ]},
+  const items = [
+    { title: "EBSCO baza podataka", desc: "Pristup akademskim člancima o poduzetništvu i izradi biznis planova.", link: "#" },
+    { title: "Univerzitetska biblioteka FINRA", desc: "Dostupna literatura iz oblasti menadžmenta i poslovnog planiranja.", link: "#" },
+    { title: "Akademski časopisi", desc: "Recenzirani članci o poslovnom planiranju i strategijskom menadžmentu.", link: "#" },
   ];
 
   return (
     <div>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ ...sectionTitle, fontSize: 32 }}>Literatura & Prezentacije</div>
+        <div style={{ ...sectionTitle, fontSize: 32 }}>Literatura</div>
         <p style={sectionSub}>Resursi koji će vam pomoći u izradi kvalitetnog biznis plana.</p>
       </div>
-      {resources.map((group) => (
-        <div key={group.cat} style={{ marginBottom: 32 }}>
-          <div style={{ fontSize: 18, fontWeight: 700, color: C.red, marginBottom: 16 }}>{group.cat}</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
-            {group.items.map((item) => (
-              <div
-                key={item.title}
-                style={{
-                  ...card,
-                  marginBottom: 0,
-                  padding: 24,
-                  cursor: "pointer",
-                  transition: "box-shadow .2s",
-                }}
-              >
-                <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{item.title}</div>
-                <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.5 }}>{item.desc}</div>
-                <div style={{ marginTop: 12, fontSize: 13, fontWeight: 700, color: C.red }}>
-                  Pristup resursu →
-                </div>
-              </div>
-            ))}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
+        {items.map((item) => (
+          <div
+            key={item.title}
+            style={{
+              ...card,
+              marginBottom: 0,
+              padding: 24,
+              cursor: "pointer",
+              transition: "box-shadow .2s",
+            }}
+          >
+            <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{item.title}</div>
+            <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.5 }}>{item.desc}</div>
+            <div style={{ marginTop: 12, fontSize: 13, fontWeight: 700, color: C.red }}>
+              Pristup resursu →
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -2903,7 +2891,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif", background: C.bg, minHeight: "100vh", color: C.text }}>
+    <div style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif", background: C.bg, minHeight: "100vh", color: C.text, display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div
         style={{
@@ -2949,12 +2937,12 @@ export default function App() {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 60px" }}>
+      <div style={{ flex: 1, width: "100%", maxWidth: 1100, margin: "0 auto", padding: "32px 24px 60px", boxSizing: "border-box" }}>
         {renderTab()}
       </div>
 
       {/* Footer */}
-      <div style={{ background: C.text, color: "rgba(255,255,255,.5)", textAlign: "center", padding: "20px", fontSize: 12 }}>
+      <div style={{ background: C.text, color: "rgba(255,255,255,.5)", textAlign: "center", padding: "20px", fontSize: 12, marginTop: "auto" }}>
         © 2026 Univerzitet FINRA — Savremeni Menadžment i Digitalno Poslovanje
       </div>
     </div>
