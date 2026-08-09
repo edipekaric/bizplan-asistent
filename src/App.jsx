@@ -2294,7 +2294,7 @@ function TabVodic() {
           <div style={pr.h2}>2. Resursi & SWOT analiza</div>
           <div style={pr.h3}>Ključne kompetencije</div><div style={pr.p}>{data.kompetencije || "—"}</div>
           <div style={pr.h3}>Ključna imovina</div><div style={pr.p}>{data.imovina || "—"}</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Snage</th><th style={pr.th}>Slabosti</th><th style={pr.th}>Mogućnosti</th><th style={pr.th}>Prijetnje</th></tr></thead>
             <tbody><tr>
               <td style={pr.td}>{data.swot.snage || "—"}</td>
@@ -2316,7 +2316,7 @@ function TabVodic() {
         {/* 4a. Izvori i upotreba kapitala */}
         <div style={pr.section}>
           <div style={pr.h2}>4a. Finansijski plan: Izvori i upotreba kapitala</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Sredstva</th><th style={pr.th}>Iznos u KM</th></tr></thead>
             <tbody>
               <tr><td style={{ ...pr.td, fontWeight: 700 }}>I STALNA SREDSTVA</td><td style={pr.tdR}>{fmt(totalStalna)}</td></tr>
@@ -2330,7 +2330,7 @@ function TabVodic() {
               <tr style={pr.totalRow}><td style={pr.td}>UKUPNO SREDSTVA</td><td style={pr.tdR}>{fmt(totalSredstva)}</td></tr>
             </tbody>
           </table>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Izvori</th><th style={pr.th}>Iznos u KM</th></tr></thead>
             <tbody>
               <tr><td style={{ ...pr.td, fontWeight: 700 }}>I VLASTITI IZVORI</td><td style={pr.tdR}>{fmt(totalVlastiti)}</td></tr>
@@ -2349,7 +2349,7 @@ function TabVodic() {
         {/* 4b. Početni bilans stanja */}
         <div style={pr.section}>
           <div style={pr.h2}>4b. Finansijski plan: Početni bilans stanja (na dan {fmtDate(data.bilansDatum)})</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Aktiva</th><th style={pr.th}>Iznos KM</th><th style={pr.th}>Pasiva</th><th style={pr.th}>Iznos KM</th></tr></thead>
             <tbody>
               <tr><td style={pr.td}>Nematerijalna ulaganja</td><td style={pr.tdR}>{fmt(data.bilansAktiva.nematerijalna)}</td><td style={pr.td}>Vlastiti kapital</td><td style={pr.tdR}>{fmt(data.bilansPasiva.vlastitiKapital)}</td></tr>
@@ -2374,7 +2374,7 @@ function TabVodic() {
         {/* 4c. Plan prodaje */}
         <div style={pr.section}>
           <div style={pr.h2}>4c. Finansijski plan: Plan prodaje (2026–2030)</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr>
               <th style={pr.th}>#</th><th style={pr.th}>Proizvod/Usluga</th><th style={pr.th}>Cijena (KM)</th>
               <th style={pr.th}>Mj. plan 2026</th><th style={pr.th}>God. 2026</th><th style={pr.th}>2027</th><th style={pr.th}>2028</th><th style={pr.th}>2029</th><th style={pr.th}>2030</th>
@@ -2398,7 +2398,7 @@ function TabVodic() {
         {/* 4d. Plan troškova */}
         <div style={pr.section}>
           <div style={pr.h2}>4d. Finansijski plan: Plan troškova (2026–2030)</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Struktura troškova</th>{costsLabels.map((h) => <th key={h} style={pr.th}>{h}</th>)}</tr></thead>
             <tbody>
               {costCategories.map((cat, idx) => {
@@ -2434,7 +2434,7 @@ function TabVodic() {
         {/* 4e. Amortizacija */}
         <div style={pr.section}>
           <div style={pr.h2}>4e. Finansijski plan: Obračun amortizacije</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Opis sredstva</th><th style={pr.th}>Nabavna vrij. (KM)</th><th style={pr.th}>Stopa (%)</th><th style={pr.th}>2026</th><th style={pr.th}>2027</th><th style={pr.th}>2028</th><th style={pr.th}>2029</th><th style={pr.th}>2030</th><th style={pr.th}>Ukupno</th></tr></thead>
             <tbody>
               {data.amort.map((a, i) => {
@@ -2468,7 +2468,7 @@ function TabVodic() {
                 Rata u grace periodu: {fmt(kreditInfo.graceRata)} KM &nbsp;|&nbsp; Izračunata rata: {fmt(kreditInfo.rata)} KM<br />
                 Ukupna kamata: {fmt(kreditInfo.ukupnaKamata)} KM &nbsp;|&nbsp; <strong>Ukupno zaduženje: {fmt(kreditInfo.ukupnoZaduzenje)} KM</strong>
               </div>
-              <table style={pr.table}>
+              <table data-pdf-table="split" style={pr.table}>
                 <thead><tr><th style={pr.th}>BR.</th><th style={pr.th}>Datum</th><th style={pr.th}>Početno zaduženje</th><th style={pr.th}>Kamata</th><th style={pr.th}>Glavnica</th><th style={pr.th}>Ostatak</th><th style={pr.th}>Kum. kamata</th></tr></thead>
                 <tbody>
                   {kreditInfo.rows.map((r) => (
@@ -2487,7 +2487,7 @@ function TabVodic() {
         {/* 4g. Normativi */}
         <div style={pr.section}>
           <div style={pr.h2}>4g. Finansijski plan: Normativi i cijene sirovina i materijala</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr>
               <th style={pr.th}>Sirovina/materijal</th><th style={pr.th}>Jed. mjere</th><th style={pr.th}>Cijena/jed. (KM)</th>
               {data.normativiProizvodi.map((p, pi) => <th key={pi} style={pr.th}>{p || `Proizvod Br.${pi + 1}`}</th>)}
@@ -2513,7 +2513,7 @@ function TabVodic() {
         {/* 4h. Bilans uspjeha */}
         <div style={pr.section}>
           <div style={pr.h2}>4h. Finansijski plan: Bilans uspjeha (2026–2030)</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Elementi</th>{[2026, 2027, 2028, 2029, 2030].map((y) => <th key={y} style={pr.th}>{y}.</th>)}</tr></thead>
             <tbody>
               {(() => {
@@ -2544,7 +2544,7 @@ function TabVodic() {
         {/* 4i. Bilans stanja na kraju godine */}
         <div style={pr.section}>
           <div style={pr.h2}>4i. Bilans stanja na kraju poslovne godine (na dan {fmtDate(data.bilansKrajDatum)})</div>
-          <table style={pr.table}>
+          <table data-pdf-table="keep" style={pr.table}>
             <thead><tr><th style={pr.th}>Aktiva</th><th style={pr.th}>Iznos KM</th><th style={pr.th}>Pasiva</th><th style={pr.th}>Iznos KM</th></tr></thead>
             <tbody>
               <tr><td style={pr.td}>Nematerijalna sredstva</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.nematerijalna)}</td><td style={pr.td}>Vlastiti kapital</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.vlastitiKapital)}</td></tr>
@@ -2620,21 +2620,180 @@ function TabVodic() {
       const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
-      const margin = 10;
-      const usableW = pageW - margin * 2;
-      const usableH = pageH - margin * 2;
+      const sideMargin = 10;
+      // ~1 cm header + ~1 cm footer so content isn't cut at page edges
+      const headerH = 12;
+      const footerH = 12;
+      const contentW = pageW - sideMargin * 2;
+      const contentH = pageH - headerH - footerH;
 
-      const imgW = usableW;
-      const imgH = (canvas.height * imgW) / canvas.width;
-      const imgData = canvas.toDataURL("image/jpeg", 0.92);
+      const scale = canvas.height / Math.max(1, clone.scrollHeight);
+      const idealPagePx = Math.floor(contentH * (canvas.width / contentW));
 
-      let offsetY = 0;
-      let page = 0;
-      while (offsetY < imgH - 0.5) {
+      const rootTop = clone.getBoundingClientRect().top;
+
+      // Keep-together tables (all except 4f). Include adjacent heading above table.
+      const keepTables = Array.from(clone.querySelectorAll('table[data-pdf-table="keep"]')).map((el) => {
+        let topEl = el;
+        const prev = el.previousElementSibling;
+        if (prev && (prev.textContent || "").trim().length < 160 && prev.children.length === 0) {
+          topEl = prev;
+        }
+        const top = (topEl.getBoundingClientRect().top - rootTop) * scale;
+        const bottom = (el.getBoundingClientRect().bottom - rootTop) * scale;
+        return { top: Math.max(0, top - 4), bottom, height: bottom - top };
+      });
+
+      // 4f may split, but prefer breaking between rows
+      const splitRowBreaks = [];
+      clone.querySelectorAll('table[data-pdf-table="split"]').forEach((table) => {
+        const rows = table.querySelectorAll("tr");
+        rows.forEach((tr, idx) => {
+          if (idx === 0) return; // don't break before first data row awkwardly mid-header alone if possible
+          const y = (tr.getBoundingClientRect().top - rootTop) * scale;
+          splitRowBreaks.push(y);
+        });
+        // also allow break after last row
+        splitRowBreaks.push((table.getBoundingClientRect().bottom - rootTop) * scale);
+      });
+      splitRowBreaks.sort((a, b) => a - b);
+
+      const snapToSplitRow = (idealY, pageStart) => {
+        // nearest row boundary at or before idealY, after pageStart
+        let best = null;
+        for (const y of splitRowBreaks) {
+          if (y <= pageStart + 8) continue;
+          if (y <= idealY + 6) best = y;
+          if (y > idealY + 6) break;
+        }
+        return best;
+      };
+
+      const avoidCuttingKeepTables = (idealY, pageStart) => {
+        let breakY = idealY;
+        for (const t of keepTables) {
+          // Would this break cut through the table?
+          if (breakY > t.top + 2 && breakY < t.bottom - 2) {
+            // Move whole table to next page if it fits there and there's some content already on this page
+            const fitsNextPage = t.height <= idealPagePx - 8;
+            const hasContentBefore = t.top - pageStart > idealPagePx * 0.12;
+            if (fitsNextPage && hasContentBefore) {
+              breakY = Math.min(breakY, t.top);
+            }
+            // else table taller than a page — unavoidable split
+          }
+        }
+        // If break still inside a keep table (too tall), leave it; white-snap later
+        return Math.max(pageStart + 20, breakY);
+      };
+
+      // Prefer cutting on near-white rows so text isn't sliced mid-line
+      const findBreakY = (idealY, pageStart) => {
+        if (idealY >= canvas.height) return canvas.height;
+
+        let candidate = avoidCuttingKeepTables(idealY, pageStart);
+
+        // Inside 4f: snap to row boundary when possible
+        const rowSnap = snapToSplitRow(candidate, pageStart);
+        const inSplitTable = splitRowBreaks.length > 0
+          && candidate >= (splitRowBreaks[0] || 0) - 20
+          && candidate <= (splitRowBreaks[splitRowBreaks.length - 1] || 0) + 20;
+        if (inSplitTable && rowSnap != null) {
+          candidate = rowSnap;
+        }
+
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const search = Math.min(40, Math.floor(idealPagePx * 0.06));
+        const start = Math.max(pageStart + 10, candidate - search);
+        const end = Math.min(canvas.height - 1, candidate + search);
+        let bestY = candidate;
+        let bestScore = -1;
+        for (let y = start; y <= end; y += 2) {
+          // Never white-snap back into a keep table interior
+          const cutsKeep = keepTables.some((t) => y > t.top + 2 && y < t.bottom - 2 && t.height <= idealPagePx - 8);
+          if (cutsKeep) continue;
+
+          const row = ctx.getImageData(0, y, canvas.width, 1).data;
+          let white = 0;
+          let samples = 0;
+          for (let i = 0; i < row.length; i += 20) {
+            samples += 1;
+            if (row[i] > 248 && row[i + 1] > 248 && row[i + 2] > 248) white += 1;
+          }
+          const whiteness = samples ? white / samples : 0;
+          const dist = Math.abs(y - candidate) / (search || 1);
+          const score = whiteness - dist * 0.2;
+          if (score > bestScore) {
+            bestScore = score;
+            bestY = y;
+          }
+        }
+
+        // Final guard: if still cutting a keep table, force break before it
+        for (const t of keepTables) {
+          if (bestY > t.top + 2 && bestY < t.bottom - 2 && t.height <= idealPagePx - 8 && t.top > pageStart + 20) {
+            bestY = t.top;
+          }
+        }
+        return bestY;
+      };
+
+      const breaks = [0];
+      let cursor = 0;
+      while (cursor + idealPagePx < canvas.height - 8) {
+        const ideal = cursor + idealPagePx;
+        let at = findBreakY(ideal, cursor);
+        if (at <= cursor + 20) {
+          at = Math.min(canvas.height, cursor + idealPagePx);
+        }
+        breaks.push(at);
+        cursor = at;
+        if (breaks.length > 80) break; // safety
+      }
+      if (breaks[breaks.length - 1] < canvas.height) breaks.push(canvas.height);
+
+      const totalPages = breaks.length - 1;
+      const sliceCanvas = document.createElement("canvas");
+      const sliceCtx = sliceCanvas.getContext("2d");
+
+      for (let page = 0; page < totalPages; page += 1) {
         if (page > 0) pdf.addPage();
-        pdf.addImage(imgData, "JPEG", margin, margin - offsetY, imgW, imgH);
-        offsetY += usableH;
-        page += 1;
+
+        const srcY = breaks[page];
+        const sliceH = Math.max(1, breaks[page + 1] - srcY);
+        sliceCanvas.width = canvas.width;
+        sliceCanvas.height = sliceH;
+        sliceCtx.fillStyle = "#ffffff";
+        sliceCtx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+        sliceCtx.drawImage(canvas, 0, srcY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+
+        const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.92);
+        const sliceHmm = (sliceH * contentW) / canvas.width;
+        pdf.addImage(sliceData, "JPEG", sideMargin, headerH, contentW, Math.min(sliceHmm, contentH));
+
+        // Header band (~1 cm)
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(0, 0, pageW, headerH, "F");
+        pdf.setDrawColor(200, 16, 46);
+        pdf.setLineWidth(0.35);
+        pdf.line(sideMargin, headerH - 0.8, pageW - sideMargin, headerH - 0.8);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(9);
+        pdf.setTextColor(200, 16, 46);
+        const headerTitle = `BizPlan — ${safeTitle}`;
+        pdf.text(headerTitle.length > 70 ? `${headerTitle.slice(0, 67)}...` : headerTitle, sideMargin, 7.5);
+
+        // Footer band (~1 cm)
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(0, pageH - footerH, pageW, footerH, "F");
+        pdf.setDrawColor(200, 200, 200);
+        pdf.setLineWidth(0.25);
+        pdf.line(sideMargin, pageH - footerH + 0.8, pageW - sideMargin, pageH - footerH + 0.8);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(8);
+        pdf.setTextColor(107, 107, 107);
+        pdf.text("Univerzitet FINRA — BizPlan Asistent", sideMargin, pageH - 4.5);
+        pdf.text(`${page + 1} / ${totalPages}`, pageW - sideMargin, pageH - 4.5, { align: "right" });
       }
 
       pdf.save(`${fileName}.pdf`);
