@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { LanguageProvider, useLang } from "./i18n";
 
 // ─── Color tokens ───
 const C = {
@@ -90,6 +91,50 @@ const label = {
   marginBottom: 6,
 };
 
+// ─── Language switcher (header top-right) ───
+function LangSwitch() {
+  const { lang, setLang, t } = useLang();
+  const langPill = (active) => ({
+    padding: "6px 14px",
+    border: "none",
+    borderRadius: 999,
+    cursor: "pointer",
+    fontSize: 13,
+    fontWeight: 700,
+    background: active ? C.white : "transparent",
+    color: active ? C.red : C.white,
+    transition: "all .2s",
+  });
+  return (
+    <div
+      role="group"
+      aria-label={t("lang.label")}
+      style={{ display: "flex", gap: 8, alignItems: "center", marginLeft: "auto", flexShrink: 0 }}
+    >
+      <span style={{ fontSize: 12, fontWeight: 600, opacity: 0.85, whiteSpace: "nowrap" }}>
+        {t("lang.label")}
+      </span>
+      <div
+        style={{
+          display: "flex",
+          gap: 2,
+          padding: 3,
+          borderRadius: 999,
+          background: "rgba(255,255,255,.18)",
+          border: "1px solid rgba(255,255,255,.28)",
+        }}
+      >
+        <button type="button" onClick={() => setLang("bs")} style={langPill(lang === "bs")} aria-label={t("lang.bs")} aria-pressed={lang === "bs"}>
+          {t("lang.bsShort")}
+        </button>
+        <button type="button" onClick={() => setLang("en")} style={langPill(lang === "en")} aria-label={t("lang.en")} aria-pressed={lang === "en"}>
+          {t("lang.enShort")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── Tooltip component ───
 function Tip({ text }) {
   const [show, setShow] = useState(false);
@@ -164,20 +209,19 @@ function Badge({ ok, text }) {
 // TAB 1 — O kreatorima
 // ═══════════════════════════════════════════
 function TabKreatori() {
+  const { t } = useLang();
   const creators = [
-    { name: "Amina Serhatlic", role: "Student", program: "Savremeni Menadžment i Digitalno Poslovanje" },
-    { name: "Valdet Pestalic", role: "Student", program: "Savremeni Menadžment i Digitalno Poslovanje" },
-    { name: "Ivona Pekaric", role: "Asistent", program: "Savremeni Menadžment i Digitalno Poslovanje" },
-    { name: "Edi Pekaric", role: "Asistent", program: "Računarstvo i informatika" },
+    { name: "Amina Serhatlic", role: t("kreatori.roles.student"), program: t("kreatori.programs.menadzment") },
+    { name: "Valdet Pestalic", role: t("kreatori.roles.student"), program: t("kreatori.programs.menadzment") },
+    { name: "Ivona Pekaric", role: t("kreatori.roles.asistent"), program: t("kreatori.programs.menadzment") },
+    { name: "Edi Pekaric", role: t("kreatori.roles.asistent"), program: t("kreatori.programs.racunarstvo") },
   ];
   return (
     <div>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ ...sectionTitle, fontSize: 32 }}>Tim iza projekta</div>
+        <div style={{ ...sectionTitle, fontSize: 32 }}>{t("kreatori.title")}</div>
         <p style={{ ...sectionSub, maxWidth: 520, margin: "8px auto 0" }}>
-          Ovaj alat je kreiran na Univerzitetu FINRA u okviru programa Savremeni Menadžment i
-          Digitalno Poslovanje, s ciljem da pomogne studentima i poduzetnicima u izradi kvalitetnih
-          biznis planova.
+          {t("kreatori.intro")}
         </p>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24 }}>
@@ -226,7 +270,7 @@ function TabKreatori() {
             <div style={{ fontSize: 13, color: C.textMuted, marginTop: 12, lineHeight: 1.5 }}>
               {c.program}
             </div>
-            <div style={{ fontSize: 13, color: C.textMuted, fontWeight: 600 }}>Univerzitet FINRA</div>
+            <div style={{ fontSize: 13, color: C.textMuted, fontWeight: 600 }}>{t("kreatori.university")}</div>
           </div>
         ))}
       </div>
@@ -238,21 +282,14 @@ function TabKreatori() {
 // TAB 2 — Informacije o aplikaciji
 // ═══════════════════════════════════════════
 function TabInfo() {
-  const features = [
-    { icon: "📝", title: "Vodič korak po korak", desc: "Strukturirani vodič koji vas vodi kroz svaki dio biznis plana uz objašnjenja i primjere." },
-    { icon: "📊", title: "Integrisane finansijske tabele", desc: "Plan prodaje, troškova, bilans stanja i uspjeha, amortizacija — sve na jednom mjestu." },
-    { icon: "✅", title: "Automatski checker", desc: "Sistem automatski provjerava da li vaši finansijski podaci imaju smisla i upozorava na greške." },
-    { icon: "📚", title: "Edukativni materijali", desc: "Pristup literaturi, prezentacijama i primjerima uspješnih biznis planova." },
-  ];
+  const { t } = useLang();
+  const features = t("info.features");
   return (
     <div>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ ...sectionTitle, fontSize: 32 }}>O aplikaciji</div>
+        <div style={{ ...sectionTitle, fontSize: 32 }}>{t("info.title")}</div>
         <p style={{ ...sectionSub, maxWidth: 560, margin: "8px auto 0" }}>
-          BizPlan Asistent je digitalni alat namijenjen studentima, srednjoškolcima i
-          nezavisnim poduzetnicima koji žele naučiti kako kreirati kvalitetan biznis plan.
-          Za razliku od postojećih rješenja privrednih komora i nevladinih organizacija,
-          ovaj alat nudi potpuno digitalno iskustvo s automatskom provjerom podataka.
+          {t("info.intro")}
         </p>
       </div>
 
@@ -268,14 +305,12 @@ function TabInfo() {
 
       <div style={{ ...card, marginTop: 12, background: C.redLight, borderColor: C.redMid }}>
         <div style={{ fontSize: 16, fontWeight: 700, color: C.redDark, marginBottom: 8 }}>
-          Kome je namijenjena aplikacija?
+          {t("info.audienceTitle")}
         </div>
         <div style={{ fontSize: 14, color: C.text, lineHeight: 1.8 }}>
-          <strong>Primarna skupina:</strong> Studenti svih usmjerenja na kojima se radi biznis plan
-          (Savremeni Menadžment, Digitalno Poslovanje, i dr.), studenti računarstva i informatike.
+          <strong>{t("info.primaryLabel")}</strong> {t("info.primaryText")}
           <br />
-          <strong>Sekundarna skupina:</strong> Srednjoškolci, nezavisni poduzetnici / freelanceri,
-          bilo ko ko želi naučiti izradu biznis plana.
+          <strong>{t("info.secondaryLabel")}</strong> {t("info.secondaryText")}
         </div>
       </div>
     </div>
@@ -286,21 +321,15 @@ function TabInfo() {
 // TAB 3 — Zašto je bitan biznis plan
 // ═══════════════════════════════════════════
 function TabZasto() {
-  const reasons = [
-    { num: "01", title: "Jasna vizija", desc: "Biznis plan pomaže da jasno definirate svoju poslovnu ideju, viziju i misiju — temelj svakog uspješnog posla." },
-    { num: "02", title: "Privlačenje investitora", desc: "Investitori i banke zahtijevaju kvalitetan biznis plan kao preduvjet za finansiranje vašeg projekta." },
-    { num: "03", title: "Analiza tržišta", desc: "Kroz izradu biznis plana detaljno analizirate tržište, konkurenciju i ciljnu grupu kupaca." },
-    { num: "04", title: "Finansijska projekcija", desc: "Omogućava realan pregled prihoda, troškova i profitabilnosti." },
-    { num: "05", title: "Smanjenje rizika", desc: "SWOT analiza i detaljno planiranje pomažu identificirati rizike prije nego što postanu problemi." },
-    { num: "06", title: "Operativni plan", desc: "Definiše proizvodne procese, kanale distribucije, marketing strategiju i ključne partnere." },
-  ];
+  const { t } = useLang();
+  const reasons = t("zasto.reasons");
 
   return (
     <div>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ ...sectionTitle, fontSize: 32 }}>Zašto je bitan biznis plan?</div>
+        <div style={{ ...sectionTitle, fontSize: 32 }}>{t("zasto.title")}</div>
         <p style={{ ...sectionSub, maxWidth: 520, margin: "8px auto 0" }}>
-          Biznis plan nije samo akademski zadatak — to je vaš putokaz ka uspješnom poslovanju.
+          {t("zasto.sub")}
         </p>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
@@ -337,17 +366,14 @@ function TabZasto() {
 // TAB 4 — Literatura
 // ═══════════════════════════════════════════
 function TabLiteratura() {
-  const items = [
-    { title: "EBSCO baza podataka", desc: "Pristup akademskim člancima o poduzetništvu i izradi biznis planova.", link: "#" },
-    { title: "Univerzitetska biblioteka FINRA", desc: "Dostupna literatura iz oblasti menadžmenta i poslovnog planiranja.", link: "#" },
-    { title: "Akademski časopisi", desc: "Recenzirani članci o poslovnom planiranju i strategijskom menadžmentu.", link: "#" },
-  ];
+  const { t } = useLang();
+  const items = t("literatura.items");
 
   return (
     <div>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ ...sectionTitle, fontSize: 32 }}>Literatura</div>
-        <p style={sectionSub}>Resursi koji će vam pomoći u izradi kvalitetnog biznis plana.</p>
+        <div style={{ ...sectionTitle, fontSize: 32 }}>{t("literatura.title")}</div>
+        <p style={sectionSub}>{t("literatura.sub")}</p>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
         {items.map((item) => (
@@ -364,7 +390,7 @@ function TabLiteratura() {
             <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{item.title}</div>
             <div style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.5 }}>{item.desc}</div>
             <div style={{ marginTop: 12, fontSize: 13, fontWeight: 700, color: C.red }}>
-              Pristup resursu →
+              {t("literatura.access")}
             </div>
           </div>
         ))}
@@ -377,42 +403,16 @@ function TabLiteratura() {
 // TAB 5 — Primjeri biznis planova
 // ═══════════════════════════════════════════
 function TabPrimjeri() {
+  const { t } = useLang();
   const [expanded, setExpanded] = useState(null);
-  const examples = [
-    {
-      name: "EcoClean d.o.o.",
-      industry: "Usluge čišćenja",
-      desc: "Ekološka firma za čišćenje poslovnih prostora koristeći isključivo organske proizvode.",
-      vizija: "Postati vodeći pružalac ekoloških usluga čišćenja u BiH.",
-      misija: "Pružamo vrhunske usluge čišćenja uz očuvanje okoliša i zdravlja naših klijenata.",
-      proizvod: "Usluge profesionalnog čišćenja poslovnih i stambenih prostora sa 100% organskim sredstvima.",
-      trziste: "Poslovni subjekti u urbanim sredinama koji cijene ekološki pristup.",
-    },
-    {
-      name: "TechBite",
-      industry: "IT / Software",
-      desc: "Startup za razvoj mobilnih aplikacija usmjerenih na mala i srednja preduzeća.",
-      vizija: "Digitalizovati mala preduzeća u regiji kroz pristupačna softverska rješenja.",
-      misija: "Kreiramo intuitivne mobilne aplikacije koje pomažu malim preduzećima da efikasnije posluju.",
-      proizvod: "Custom mobilne aplikacije, SaaS rješenja za upravljanje zalihama i CRM sistemi.",
-      trziste: "MSP sektor u BiH i regiji, posebno trgovine i ugostiteljski objekti.",
-    },
-    {
-      name: "Zelena Livada",
-      industry: "Poljoprivreda",
-      desc: "Organska farma za proizvodnju povrća i voća sa direktnom prodajom potrošačima.",
-      vizija: "Biti prepoznat brend organske hrane u BiH.",
-      misija: "Proizvodimo zdravo, lokalno i organski certificirano povrće i voće.",
-      proizvod: "Organski certificirano povrće (paradajz, paprika, krastavci) i voće (jabuke, šljive).",
-      trziste: "Zdravstveno svjesni potrošači, restorani, i organske prodavnice.",
-    },
-  ];
+  const examples = t("primjeri.examples");
+  const exLabels = t("primjeri.labels");
 
   return (
     <div>
       <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ ...sectionTitle, fontSize: 32 }}>Primjeri biznis planova</div>
-        <p style={sectionSub}>Pogledajte primjere kako bi trebao izgledati popunjen biznis plan.</p>
+        <div style={{ ...sectionTitle, fontSize: 32 }}>{t("primjeri.title")}</div>
+        <p style={sectionSub}>{t("primjeri.sub")}</p>
       </div>
       {examples.map((ex, i) => (
         <div key={i} style={{ ...card, cursor: "pointer" }} onClick={() => setExpanded(expanded === i ? null : i)}>
@@ -443,9 +443,9 @@ function TabPrimjeri() {
           {expanded === i && (
             <div style={{ marginTop: 20, borderTop: `1px solid ${C.border}`, paddingTop: 20 }}>
               {[
-                ["Vizija & Misija", `${ex.vizija}\n${ex.misija}`],
-                ["Proizvod / Usluga", ex.proizvod],
-                ["Ciljno tržište", ex.trziste],
+                [exLabels.vizijaMisija, `${ex.vizija}\n${ex.misija}`],
+                [exLabels.proizvod, ex.proizvod],
+                [exLabels.trziste, ex.trziste],
               ].map(([lbl, val]) => (
                 <div key={lbl} style={{ marginBottom: 16 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: C.red, marginBottom: 4 }}>{lbl}</div>
@@ -464,21 +464,10 @@ function TabPrimjeri() {
 // TAB 6 — Vodič / Biznis Plan Builder
 // ═══════════════════════════════════════════
 
-const STEPS = [
-  { id: "info", label: "Osnovne informacije" },
-  { id: "strategija", label: "1. Ključna strategija" },
-  { id: "resursi", label: "2. Resursi & SWOT" },
-  { id: "operacije", label: "3. Operacije" },
-  { id: "investicije", label: "4a. Finansijski plan: Izvori i upotreba kapitala" },
-  { id: "bilans_poc", label: "4b. Finansijski plan: Bilans stanja i uspjeha" },
-  { id: "plan_prodaje", label: "4c. Finansijski plan: Plan prodaje" },
-  { id: "plan_troskova", label: "4d. Finansijski plan: Plan troškova" },
-  { id: "amortizacija", label: "4e. Finansijski plan: Obračun Amortizacije" },
-  { id: "kredit", label: "4f. Finansijski plan: Otplatni plan kredita" },
-  { id: "normativi", label: "4g. Finansijski plan: Normativi i cijene sirovina" },
-  { id: "bilans_uspjeha", label: "4h. Finansijski plan: Bilans uspjeha" },
-  { id: "bilans_kraj", label: "4i. Bilans stanja (na kraju poslovne godine)" },
-  { id: "sazetak", label: "Sažetak & Provjera" },
+const STEP_IDS = [
+  "info", "strategija", "resursi", "operacije", "investicije", "bilans_poc",
+  "plan_prodaje", "plan_troskova", "amortizacija", "kredit", "normativi",
+  "bilans_uspjeha", "bilans_kraj", "sazetak",
 ];
 
 function initData() {
@@ -554,6 +543,7 @@ function TableInput({ value, onChange, width }) {
 // Date input in dd/mm/yyyy order — stores value internally as ISO "YYYY-MM-DD"
 // so it stays compatible with date math elsewhere, but is always entered/displayed as dd/mm/yyyy.
 function DateDMY({ value, onChange }) {
+  const { t } = useLang();
   const [day, setDay] = useState(value ? value.split("-")[2] || "" : "");
   const [month, setMonth] = useState(value ? value.split("-")[1] || "" : "");
   const [year, setYear] = useState(value ? value.split("-")[0] || "" : "");
@@ -577,19 +567,19 @@ function DateDMY({ value, onChange }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
       <input
-        type="number" min="1" max="31" placeholder="dd" value={day}
+        type="number" min="1" max="31" placeholder={t("date.dd")} value={day}
         onChange={(e) => { const v = e.target.value; setDay(v); commit(v, month, year); }}
         style={dmyInput}
       />
       <span style={{ color: C.textMuted, fontWeight: 700 }}>/</span>
       <input
-        type="number" min="1" max="12" placeholder="mm" value={month}
+        type="number" min="1" max="12" placeholder={t("date.mm")} value={month}
         onChange={(e) => { const v = e.target.value; setMonth(v); commit(day, v, year); }}
         style={dmyInput}
       />
       <span style={{ color: C.textMuted, fontWeight: 700 }}>/</span>
       <input
-        type="number" min="1900" max="2100" placeholder="gggg" value={year}
+        type="number" min="1900" max="2100" placeholder={t("date.yyyy")} value={year}
         onChange={(e) => { const v = e.target.value; setYear(v); commit(day, month, v); }}
         style={{ ...dmyInput, width: 76 }}
       />
@@ -598,11 +588,18 @@ function DateDMY({ value, onChange }) {
 }
 
 function TabVodic() {
+  const { t, lang } = useLang();
   const [step, setStep] = useState(0);
   const [data, setData] = useState(initData);
   const [errors, setErrors] = useState([]);
   const [pdfExporting, setPdfExporting] = useState(false);
   const printReportRef = useRef(null);
+  const dateLocale = lang === "bs" ? "bs-BA" : "en-GB";
+
+  const STEPS = useMemo(
+    () => STEP_IDS.map((id) => ({ id, label: t(`steps.${id}`) })),
+    [t]
+  );
 
   const set = useCallback((path, val) => {
     setData((prev) => {
@@ -705,7 +702,7 @@ function TabVodic() {
       if (!baseDate) return "";
       const d = new Date(baseDate);
       d.setMonth(d.getMonth() + (idx - 1));
-      return d.toLocaleDateString("bs-BA");
+      return d.toLocaleDateString(dateLocale);
     };
 
     // Generate otplatni plan rows (OTPLATNI PLAN)
@@ -728,69 +725,81 @@ function TabVodic() {
       rows.push({ br: G + m, datum: dateForRow(G + m), zaduzenje: pocetno, kamata: kam, glavnica: glav, ostatak: Math.max(0, zaduzenje), kumKamata });
     }
     return { osnovica, graceRata, rata, graceKamata, kamatuUOtplati, ukupnaKamata, ukupnoZaduzenje, rows };
-  }, [data.kredit]);
+  }, [data.kredit, dateLocale]);
 
   // ── Validation ──
   const validate = useCallback(() => {
     const errs = [];
-    if (!data.naziv.trim()) errs.push("Naziv biznis plana nije unesen.");
-    if (!data.vizija.trim()) errs.push("Vizija nije unesena.");
-    if (!data.misija.trim()) errs.push("Misija nije unesena.");
-    if (!data.proizvod.trim()) errs.push("Proizvod/Usluga nije opisana.");
-    if (!data.ciljnoTrziste.trim()) errs.push("Ciljno tržište nije definirano.");
+    if (!data.naziv.trim()) errs.push(t("vodic.errors.naziv"));
+    if (!data.vizija.trim()) errs.push(t("vodic.errors.vizija"));
+    if (!data.misija.trim()) errs.push(t("vodic.errors.misija"));
+    if (!data.proizvod.trim()) errs.push(t("vodic.errors.proizvod"));
+    if (!data.ciljnoTrziste.trim()) errs.push(t("vodic.errors.trziste"));
     if (!data.swot.snage.trim() || !data.swot.slabosti.trim() || !data.swot.prijetnje.trim() || !data.swot.mogucnosti.trim())
-      errs.push("SWOT analiza nije potpuna — popunite sva 4 polja.");
-    if (totalSredstva <= 0) errs.push("Ukupna sredstva (investicije) su 0 — unesite vrijednosti.");
-    if (totalIzvori <= 0) errs.push("Ukupni izvori sredstava su 0.");
+      errs.push(t("vodic.errors.swot"));
+    if (totalSredstva <= 0) errs.push(t("vodic.errors.sredstvaNula"));
+    if (totalIzvori <= 0) errs.push(t("vodic.errors.izvoriNula"));
     if (Math.abs(totalSredstva - totalIzvori) > 0.01)
-      errs.push(`Sredstva (${totalSredstva.toLocaleString()} KM) ≠ Izvori (${totalIzvori.toLocaleString()} KM). Razlika: ${(totalSredstva - totalIzvori).toLocaleString()} KM.`);
-    
-    const hasRevenue = prihodi.some((p) => p > 0);
-    if (!hasRevenue) errs.push("Plan prodaje je prazan — unesite barem jedan proizvod/uslugu.");
-    
-    const hasCosts = ukupniTroskovi.some((t) => t > 0);
-    if (!hasCosts) errs.push("Plan troškova je prazan.");
+      errs.push(t("vodic.errors.neuravnotezeno", {
+        sredstva: totalSredstva.toLocaleString(),
+        izvori: totalIzvori.toLocaleString(),
+        diff: (totalSredstva - totalIzvori).toLocaleString(),
+      }));
 
-    // Provjera profitabilnosti
+    const hasRevenue = prihodi.some((p) => p > 0);
+    if (!hasRevenue) errs.push(t("vodic.errors.prodajaPrazna"));
+
+    const hasCosts = ukupniTroskovi.some((c) => c > 0);
+    if (!hasCosts) errs.push(t("vodic.errors.troskoviPrazni"));
+
     for (let i = 0; i < 5; i++) {
       if (prihodi[i] > 0 && ukupniTroskovi[i] > prihodi[i] * 3) {
-        errs.push(`Troškovi u ${2026 + i}. su više od 3x veći od prihoda — provjerite podatke.`);
+        errs.push(t("vodic.errors.troskoviPreveliki", { year: 2026 + i }));
       }
     }
 
-    // Provjera da mjesečni × 12 ≈ godišnji za prodaju
-    data.prodaja.forEach((p, idx) => {
+    data.prodaja.forEach((p) => {
       if (p.naziv && num(p.mj2026) > 0 && num(p.god2026) > 0) {
         const expected = num(p.mj2026) * 12;
         if (Math.abs(expected - num(p.god2026)) > expected * 0.2) {
-          errs.push(`Proizvod "${p.naziv}": Mjesečni plan × 12 (${expected.toLocaleString()}) znatno odstupa od godišnjeg (${num(p.god2026).toLocaleString()}).`);
+          errs.push(t("vodic.errors.odstupanje", {
+            name: p.naziv,
+            expected: expected.toLocaleString(),
+            actual: num(p.god2026).toLocaleString(),
+          }));
         }
       }
     });
 
     setErrors(errs);
     return errs;
-  }, [data, totalSredstva, totalIzvori, prihodi, ukupniTroskovi]);
+  }, [data, totalSredstva, totalIzvori, prihodi, ukupniTroskovi, t]);
 
   // Table helper (moved to module scope — see TableInput below)
 
-  const costsLabels = ["Mjesečni nivo za 2026.", "Godišnji nivo za 2026.", "2027.", "2028.", "2029.", "2030."];
-  const costCategories = [
-    { type: "section", label: "1. Materijalni troškovi", keys: ["sirovine", "zakup", "energija", "ostaliMat"] },
-    { key: "sirovine", label: "Troškovi sirovina i repromaterijala", sub: true },
-    { key: "zakup", label: "Troškovi zakupa", sub: true },
-    { key: "energija", label: "Troškovi el. energije", sub: true },
-    { key: "ostaliMat", label: "Ostali materijalni troškovi (voda, gorivo)", sub: true },
-    { type: "section", label: "2. Troškovi usluga", keys: ["ptt", "komunalne", "marketing"] },
-    { key: "ptt", label: "PTT", sub: true },
-    { key: "komunalne", label: "Komunalne usluge", sub: true },
-    { key: "marketing", label: "Ostale neproizvodne usluge (marketing itd)", sub: true },
-    { type: "section", label: "3. Plate (bruto)", keys: ["netoPlate", "porezi"] },
-    { key: "netoPlate", label: "Neto plate", sub: true },
-    { key: "porezi", label: "Porezi i doprinosi na plate", sub: true },
-    { key: "kamate", label: "4. Kamate na kredite", sub: false },
-    { key: "nvRobe", label: "5. NV prodate robe (za trgovačka preduzeća)", sub: false },
-  ];
+  const costsLabels = useMemo(
+    () => [t("vodic.planTroskova.colMonthly"), t("vodic.planTroskova.colAnnual"), "2027.", "2028.", "2029.", "2030."],
+    [t]
+  );
+  const costCategories = useMemo(
+    () => [
+      { type: "section", label: t("vodic.planTroskova.cat.sectionMaterijalni"), keys: ["sirovine", "zakup", "energija", "ostaliMat"] },
+      { key: "sirovine", label: t("vodic.planTroskova.cat.sirovine"), sub: true },
+      { key: "zakup", label: t("vodic.planTroskova.cat.zakup"), sub: true },
+      { key: "energija", label: t("vodic.planTroskova.cat.energija"), sub: true },
+      { key: "ostaliMat", label: t("vodic.planTroskova.cat.ostaliMat"), sub: true },
+      { type: "section", label: t("vodic.planTroskova.cat.sectionUsluge"), keys: ["ptt", "komunalne", "marketing"] },
+      { key: "ptt", label: t("vodic.planTroskova.cat.ptt"), sub: true },
+      { key: "komunalne", label: t("vodic.planTroskova.cat.komunalne"), sub: true },
+      { key: "marketing", label: t("vodic.planTroskova.cat.marketing"), sub: true },
+      { type: "section", label: t("vodic.planTroskova.cat.sectionPlate"), keys: ["netoPlate", "porezi"] },
+      { key: "netoPlate", label: t("vodic.planTroskova.cat.netoPlate"), sub: true },
+      { key: "porezi", label: t("vodic.planTroskova.cat.porezi"), sub: true },
+      { key: "kamate", label: t("vodic.planTroskova.cat.kamate"), sub: false },
+      { key: "nvRobe", label: t("vodic.planTroskova.cat.nvRobe"), sub: false },
+    ],
+    [t]
+  );
 
   const currentStep = STEPS[step];
 
@@ -805,33 +814,33 @@ function TabVodic() {
       const next = JSON.parse(JSON.stringify(prev));
       switch (id) {
         case "info": {
-          next.naziv = pick(["EcoNova d.o.o.", "TehnoPlus", "Zelena Budućnost", "UrbanCraft", "Digital Hub"]) + " " + rnd(1, 99);
-          next.autori = "Amina Serhatlic, Valdet Pestalic";
+          next.naziv = pick(t("vodic.sample.companyNames")) + " " + rnd(1, 99);
+          next.autori = t("vodic.sample.autori");
           break;
         }
         case "strategija": {
-          next.vizija = "Postati prepoznatljiv i pouzdan brend na tržištu u narednih 5 godina.";
-          next.misija = "Pružamo kvalitetne proizvode/usluge uz fokus na zadovoljstvo kupaca i održivost.";
-          next.proizvod = "Proizvodnja i prodaja proizvoda/usluga prilagođenih potrebama savremenog tržišta.";
-          next.novaVrijednost = "Brža isporuka, bolja cijena i personaliziran pristup u odnosu na konkurenciju.";
-          next.ciljnoTrziste = "Urbani potrošači u dobi od 20 do 45 godina, srednjeg i visokog dohotka.";
+          next.vizija = t("vodic.sample.vizija");
+          next.misija = t("vodic.sample.misija");
+          next.proizvod = t("vodic.sample.proizvod");
+          next.novaVrijednost = t("vodic.sample.novaVrijednost");
+          next.ciljnoTrziste = t("vodic.sample.ciljnoTrziste");
           break;
         }
         case "resursi": {
-          next.kompetencije = "Iskusan tim sa višegodišnjim iskustvom u industriji i jakim stručnim znanjem.";
-          next.imovina = "Poslovni prostor, oprema, vozila i informatička infrastruktura.";
+          next.kompetencije = t("vodic.sample.kompetencije");
+          next.imovina = t("vodic.sample.imovina");
           next.swot = {
-            snage: "Iskusan tim, kvalitetan proizvod, jaka lokalna prepoznatljivost.",
-            slabosti: "Ograničen marketinški budžet, mala tržišna pokrivenost.",
-            mogucnosti: "Rastuće tržište, digitalizacija, nove tehnologije.",
-            prijetnje: "Jaka konkurencija, promjene propisa, rast cijena sirovina.",
+            snage: t("vodic.sample.snage"),
+            slabosti: t("vodic.sample.slabosti"),
+            mogucnosti: t("vodic.sample.mogucnosti"),
+            prijetnje: t("vodic.sample.prijetnje"),
           };
           break;
         }
         case "operacije": {
-          next.proizvodnja = "Proizvodnja/usluga se odvija u vlastitom prostoru uz strogu kontrolu kvalitete.";
-          next.promocija = "Marketing putem društvenih mreža, lokalnih sajmova i preporuka kupaca.";
-          next.partneri = "Lokalni dobavljači sirovina, logistički partneri i finansijske institucije.";
+          next.proizvodnja = t("vodic.sample.proizvodnja");
+          next.promocija = t("vodic.sample.promocija");
+          next.partneri = t("vodic.sample.partneri");
           break;
         }
         case "investicije": {
@@ -882,7 +891,7 @@ function TabVodic() {
             const god2029 = Math.round(god2028 * rast());
             const god2030 = Math.round(god2029 * rast());
             return {
-              naziv: p.naziv || `Proizvod ${i + 1}`,
+              naziv: p.naziv || t("vodic.sample.product", { n: i + 1 }),
               cijena, mj2026, god2026, god2027, god2028, god2029, god2030,
             };
           });
@@ -903,7 +912,7 @@ function TabVodic() {
         }
         case "amortizacija": {
           const stope = [5, 10, 15, 20, 33.3, 40];
-          const nazivi = ["Oprema", "Vozilo", "Računar i softver", "Poslovni prostor", "Namještaj", "Postrojenje"];
+          const nazivi = t("vodic.sample.amortNames");
           next.amort = next.amort.map((a, i) => ({
             opis: a.opis || nazivi[i % nazivi.length],
             nabavna: rnd(1000, 30000),
@@ -925,11 +934,12 @@ function TabVodic() {
           break;
         }
         case "normativi": {
-          next.normativiProizvodi = next.normativiProizvodi.map((p, i) => p || `Proizvod ${i + 1}`);
-          const sirovine = ["Brašno", "Šećer", "Ambalaža", "Boja", "Metal", "Tekstil", "Plastika"];
+          next.normativiProizvodi = next.normativiProizvodi.map((p, i) => p || t("vodic.sample.product", { n: i + 1 }));
+          const sirovine = t("vodic.sample.sirovine");
+          const jedMjere = t("vodic.sample.jedMjere");
           next.normativi = next.normativi.map((n, i) => ({
             naziv: n.naziv || sirovine[i % sirovine.length],
-            jedMjere: pick(["kg", "l", "kom", "m"]),
+            jedMjere: pick(jedMjere),
             cijena: rndF(0.5, 25, 2),
             kolicine: n.kolicine.map(() => rndF(0.1, 5, 2)),
           }));
@@ -958,7 +968,7 @@ function TabVodic() {
           break;
         }
         case "sazetak": {
-          next.sazetak = "Ukupna ulaganja finansirana su kombinacijom vlastitih i kreditnih sredstava. Projekcije pokazuju rast prihoda i profitabilnosti kroz sve godine planiranja.";
+          next.sazetak = t("vodic.sample.sazetak");
           break;
         }
         default:
@@ -974,13 +984,13 @@ function TabVodic() {
       case "info":
         return (
           <div>
-            <div style={sectionTitle}>Osnovne informacije</div>
-            <p style={sectionSub}>Unesite osnovne podatke o vašem biznis planu.</p>
-            <Field lbl="Naziv biznis plana" tip="Naziv vaše kompanije ili poslovne ideje.">
-              <input style={inputStyle} value={data.naziv} onChange={(e) => set("naziv", e.target.value)} placeholder="npr. EcoClean d.o.o." />
+            <div style={sectionTitle}>{t("vodic.info.title")}</div>
+            <p style={sectionSub}>{t("vodic.info.sub")}</p>
+            <Field lbl={t("vodic.info.nazivLbl")} tip={t("vodic.info.nazivTip")}>
+              <input style={inputStyle} value={data.naziv} onChange={(e) => set("naziv", e.target.value)} placeholder={t("vodic.info.nazivPh")} />
             </Field>
-            <Field lbl="Autori" tip="Imena autora biznis plana.">
-              <input style={inputStyle} value={data.autori} onChange={(e) => set("autori", e.target.value)} placeholder="npr. Amina Serhatlic, Valdet Pestalic" />
+            <Field lbl={t("vodic.info.autoriLbl")} tip={t("vodic.info.autoriTip")}>
+              <input style={inputStyle} value={data.autori} onChange={(e) => set("autori", e.target.value)} placeholder={t("vodic.info.autoriPh")} />
             </Field>
           </div>
         );
@@ -988,22 +998,22 @@ function TabVodic() {
       case "strategija":
         return (
           <div>
-            <div style={sectionTitle}>1. Ključna strategija</div>
-            <p style={sectionSub}>Definirajte viziju, misiju, proizvod/uslugu, novu vrijednost i ciljno tržište.</p>
-            <Field lbl="Vizija" tip="Vizija opisuje dugoročnu sliku onoga što želite postići. Primjer: 'Postati vodeći pružalac ekoloških usluga čišćenja u BiH.'">
-              <textarea style={textareaStyle} value={data.vizija} onChange={(e) => set("vizija", e.target.value)} placeholder="Šta je vaša dugoročna vizija?" />
+            <div style={sectionTitle}>{t("vodic.strategija.title")}</div>
+            <p style={sectionSub}>{t("vodic.strategija.sub")}</p>
+            <Field lbl={t("vodic.strategija.vizijaLbl")} tip={t("vodic.strategija.vizijaTip")}>
+              <textarea style={textareaStyle} value={data.vizija} onChange={(e) => set("vizija", e.target.value)} placeholder={t("vodic.strategija.vizijaPh")} />
             </Field>
-            <Field lbl="Misija" tip="Misija opisuje svrhu vašeg poslovanja i kako planirate ostvariti viziju. Primjer: 'Pružamo vrhunske usluge čišćenja uz očuvanje okoliša.'">
-              <textarea style={textareaStyle} value={data.misija} onChange={(e) => set("misija", e.target.value)} placeholder="Koja je svrha vašeg poslovanja?" />
+            <Field lbl={t("vodic.strategija.misijaLbl")} tip={t("vodic.strategija.misijaTip")}>
+              <textarea style={textareaStyle} value={data.misija} onChange={(e) => set("misija", e.target.value)} placeholder={t("vodic.strategija.misijaPh")} />
             </Field>
-            <Field lbl="Proizvod / Usluga" tip="Detaljno opišite šta nudite tržištu — koji su vaši proizvodi ili usluge, koje probleme rješavaju.">
-              <textarea style={textareaStyle} value={data.proizvod} onChange={(e) => set("proizvod", e.target.value)} placeholder="Opišite proizvode ili usluge..." />
+            <Field lbl={t("vodic.strategija.proizvodLbl")} tip={t("vodic.strategija.proizvodTip")}>
+              <textarea style={textareaStyle} value={data.proizvod} onChange={(e) => set("proizvod", e.target.value)} placeholder={t("vodic.strategija.proizvodPh")} />
             </Field>
-            <Field lbl="Nova vrijednost" tip="Šta je osnov za razlikovanje od drugih na tržištu? Šta vas čini posebnima?">
-              <textarea style={textareaStyle} value={data.novaVrijednost} onChange={(e) => set("novaVrijednost", e.target.value)} placeholder="Šta vas razlikuje od konkurencije?" />
+            <Field lbl={t("vodic.strategija.novaVrijednostLbl")} tip={t("vodic.strategija.novaVrijednostTip")}>
+              <textarea style={textareaStyle} value={data.novaVrijednost} onChange={(e) => set("novaVrijednost", e.target.value)} placeholder={t("vodic.strategija.novaVrijednostPh")} />
             </Field>
-            <Field lbl="Ciljno tržište" tip="Definirajte ko su vaši kupci, segmentaciju tržišta i ciljnu grupu. Primjer: 'Poslovni subjekti u urbanim sredinama koji cijene ekološki pristup.'">
-              <textarea style={textareaStyle} value={data.ciljnoTrziste} onChange={(e) => set("ciljnoTrziste", e.target.value)} placeholder="Ko su vaši kupci i ciljna grupa?" />
+            <Field lbl={t("vodic.strategija.trzisteLbl")} tip={t("vodic.strategija.trzisteTip")}>
+              <textarea style={textareaStyle} value={data.ciljnoTrziste} onChange={(e) => set("ciljnoTrziste", e.target.value)} placeholder={t("vodic.strategija.trzistePh")} />
             </Field>
           </div>
         );
@@ -1011,28 +1021,23 @@ function TabVodic() {
       case "resursi":
         return (
           <div>
-            <div style={sectionTitle}>2. Resursi & SWOT analiza</div>
-            <p style={sectionSub}>Opišite resurse kojima raspolažete i napravite SWOT analizu.</p>
-            <Field lbl="Ključne kompetencije" tip="Resursi, znanja i vještine kojima raspolažete (tim, iskustvo, know-how).">
-              <textarea style={textareaStyle} value={data.kompetencije} onChange={(e) => set("kompetencije", e.target.value)} placeholder="Npr. Iskusan tim u oblasti IT-a..." />
+            <div style={sectionTitle}>{t("vodic.resursi.title")}</div>
+            <p style={sectionSub}>{t("vodic.resursi.sub")}</p>
+            <Field lbl={t("vodic.resursi.kompetencijeLbl")} tip={t("vodic.resursi.kompetencijeTip")}>
+              <textarea style={textareaStyle} value={data.kompetencije} onChange={(e) => set("kompetencije", e.target.value)} placeholder={t("vodic.resursi.kompetencijePh")} />
             </Field>
-            <Field lbl="Ključna imovina" tip="Materijalni i nematerijalni resursi: oprema, prostor, softver, patenti, itd.">
-              <textarea style={textareaStyle} value={data.imovina} onChange={(e) => set("imovina", e.target.value)} placeholder="Npr. Poslovni prostor, oprema..." />
+            <Field lbl={t("vodic.resursi.imovinaLbl")} tip={t("vodic.resursi.imovinaTip")}>
+              <textarea style={textareaStyle} value={data.imovina} onChange={(e) => set("imovina", e.target.value)} placeholder={t("vodic.resursi.imovinaPh")} />
             </Field>
-            <div style={{ fontSize: 18, fontWeight: 700, color: C.red, margin: "24px 0 16px" }}>SWOT Analiza</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: C.red, margin: "24px 0 16px" }}>{t("vodic.resursi.swotTitle")}</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              {[
-                ["snage", "Snage (S)", "Interne prednosti vašeg poslovanja."],
-                ["slabosti", "Slabosti (W)", "Interne slabosti koje treba poboljšati."],
-                ["mogucnosti", "Mogućnosti (O)", "Vanjske prilike koje možete iskoristiti."],
-                ["prijetnje", "Prijetnje (T)", "Vanjski faktori koji mogu ugroziti posao."],
-              ].map(([key, lbl, tip]) => (
-                <Field key={key} lbl={lbl} tip={tip}>
+              {(["snage", "slabosti", "mogucnosti", "prijetnje"]).map((key) => (
+                <Field key={key} lbl={t(`vodic.resursi.swot.${key}.lbl`)} tip={t(`vodic.resursi.swot.${key}.tip`)}>
                   <textarea
                     style={{ ...textareaStyle, minHeight: 80 }}
                     value={data.swot[key]}
                     onChange={(e) => set(`swot.${key}`, e.target.value)}
-                    placeholder={lbl + "..."}
+                    placeholder={`${t(`vodic.resursi.swot.${key}.lbl`)}...`}
                   />
                 </Field>
               ))}
@@ -1043,16 +1048,16 @@ function TabVodic() {
       case "operacije":
         return (
           <div>
-            <div style={sectionTitle}>3. Operacije</div>
-            <p style={sectionSub}>Opišite proizvodne procese, kanale distribucije i ključne partnere.</p>
-            <Field lbl="Proizvodnja / Usluge" tip="Opišite kako funkcioniše vaš proizvodni proces ili pružanje usluga.">
-              <textarea style={textareaStyle} value={data.proizvodnja} onChange={(e) => set("proizvodnja", e.target.value)} placeholder="Kako proizvodi nastaju ili kako se usluge pružaju?" />
+            <div style={sectionTitle}>{t("vodic.operacije.title")}</div>
+            <p style={sectionSub}>{t("vodic.operacije.sub")}</p>
+            <Field lbl={t("vodic.operacije.proizvodnjaLbl")} tip={t("vodic.operacije.proizvodnjaTip")}>
+              <textarea style={textareaStyle} value={data.proizvodnja} onChange={(e) => set("proizvodnja", e.target.value)} placeholder={t("vodic.operacije.proizvodnjaPh")} />
             </Field>
-            <Field lbl="Promocija & Kanali distribucije" tip="Kako ćete promovirati i distribuirati svoj proizvod/uslugu? Online marketing, maloprodaja, veleprodaja, itd.">
-              <textarea style={textareaStyle} value={data.promocija} onChange={(e) => set("promocija", e.target.value)} placeholder="Marketing strategija i kanali prodaje..." />
+            <Field lbl={t("vodic.operacije.promocijaLbl")} tip={t("vodic.operacije.promocijaTip")}>
+              <textarea style={textareaStyle} value={data.promocija} onChange={(e) => set("promocija", e.target.value)} placeholder={t("vodic.operacije.promocijaPh")} />
             </Field>
-            <Field lbl="Ključni partneri" tip="Kupci, dobavljači, investitori i drugi važni partneri za vaše poslovanje.">
-              <textarea style={textareaStyle} value={data.partneri} onChange={(e) => set("partneri", e.target.value)} placeholder="Navedite ključne partnere..." />
+            <Field lbl={t("vodic.operacije.partneriLbl")} tip={t("vodic.operacije.partneriTip")}>
+              <textarea style={textareaStyle} value={data.partneri} onChange={(e) => set("partneri", e.target.value)} placeholder={t("vodic.operacije.partneriPh")} />
             </Field>
           </div>
         );
@@ -1062,49 +1067,52 @@ function TabVodic() {
         const tblCell = { padding: "6px 12px", borderBottom: `1px solid ${C.border}`, fontSize: 13 };
         const tblSection = { padding: "10px 12px", borderBottom: `1px solid ${C.border}`, fontWeight: 700, fontSize: 13, background: C.redLight, color: C.redDark };
         const tblTotal = { padding: "10px 12px", fontWeight: 800, fontSize: 14, background: C.red, color: C.white };
+        const inv = t("vodic.investicije.inv");
+        const izv = t("vodic.investicije.izv");
         const invRows = [
-          { section: true, label: "I STALNA SREDSTVA", value: totalStalna },
-          { key: "zemljiste", label: "1. Zemljište", num: 1 },
-          { key: "zgrade", label: "2. Zgrade", num: 2 },
-          { key: "oprema", label: "3. Oprema", num: 3 },
-          { key: "vozila", label: "4. Vozila", num: 4 },
-          { key: "inventar", label: "5. Poslovni inventar i ostala sredstva", num: 5 },
-          { key: "osnivacka", label: "6. Osnivačka ulaganja (d.o.o., d.d.)", num: 6 },
-          { key: "nematerijalna", label: "7. Nematerijalna sredstva", num: 7 },
-          { section: true, label: "II TEKUĆA SREDSTVA", value: totalTekuca },
-          { key: "zalihe", label: "1. Zalihe", num: 8 },
-          { key: "potrazivanja", label: "2. Potraživanja", num: 9 },
-          { key: "gotovina", label: "3. Gotovina", num: 10 },
+          { section: true, label: inv.stalna, value: totalStalna },
+          { key: "zemljiste", label: inv.zemljiste },
+          { key: "zgrade", label: inv.zgrade },
+          { key: "oprema", label: inv.oprema },
+          { key: "vozila", label: inv.vozila },
+          { key: "inventar", label: inv.inventar },
+          { key: "osnivacka", label: inv.osnivacka },
+          { key: "nematerijalna", label: inv.nematerijalna },
+          { section: true, label: inv.tekuca, value: totalTekuca },
+          { key: "zalihe", label: inv.zalihe },
+          { key: "potrazivanja", label: inv.potrazivanja },
+          { key: "gotovina", label: inv.gotovina },
         ];
         const izvRows = [
-          { section: true, label: "I VLASTITI IZVORI", value: totalVlastiti },
-          { key: "novac", label: "1. Novac" },
-          { section2: true, label: "2. Stvari i prava:" },
-          { key: "zemljiste_v", label: "    - zemljište", indent: true },
-          { key: "gradevine_v", label: "    - građevine (poslovni prostor)", indent: true },
-          { key: "oprema_v", label: "    - oprema", indent: true },
-          { key: "ostalo_v", label: "    - ostalo", indent: true },
-          { section: true, label: "II KREDITI — TUĐI IZVORI", value: totalTudi },
-          { key: "dugorocni", label: "1. Dugoročni krediti" },
-          { key: "kratkorocni", label: "2. Kratkoročni krediti" },
-          { key: "ostali_tudi", label: "3. Ostali tuđi izvori (pozajmice)" },
+          { section: true, label: izv.vlastiti, value: totalVlastiti },
+          { key: "novac", label: izv.novac },
+          { section2: true, label: izv.stvariPrava },
+          { key: "zemljiste_v", label: izv.zemljiste, indent: true },
+          { key: "gradevine_v", label: izv.gradevine, indent: true },
+          { key: "oprema_v", label: izv.oprema, indent: true },
+          { key: "ostalo_v", label: izv.ostalo, indent: true },
+          { section: true, label: izv.krediti, value: totalTudi },
+          { key: "dugorocni", label: izv.dugorocni },
+          { key: "kratkorocni", label: izv.kratkorocni },
+          { key: "ostali_tudi", label: izv.ostaliTudi },
         ];
+        const usk = t("vodic.investicije.usk");
         return (
           <div>
-            <div style={sectionTitle}>4a. Finansijski plan: Izvori i upotreba kapitala</div>
-            <p style={sectionSub}>Unesite investicije u stalna i tekuća sredstva, izvore sredstava, te provjerite usklađenost.</p>
+            <div style={sectionTitle}>{t("vodic.investicije.title")}</div>
+            <p style={sectionSub}>{t("vodic.investicije.sub")}</p>
 
             {/* ── TABELA A: Investicije ── */}
             <div style={{ ...card, padding: 0, overflow: "hidden", marginBottom: 28 }}>
               <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 17, fontWeight: 800, color: C.redDark }}>A) Investicije (ulaganja) u stalna i tekuća sredstva</div>
+                <div style={{ fontSize: 17, fontWeight: 800, color: C.redDark }}>{t("vodic.investicije.tableA")}</div>
               </div>
               <table style={{ borderCollapse: "collapse", width: "100%" }}>
                 <thead>
                   <tr>
-                    <th style={{ ...tblHead, width: "50%" }}>Sredstva</th>
-                    <th style={{ ...tblHead, width: "25%" }}>Iznos u KM</th>
-                    <th style={{ ...tblHead, width: "25%" }}>Napomena</th>
+                    <th style={{ ...tblHead, width: "50%" }}>{t("vodic.investicije.thSredstva")}</th>
+                    <th style={{ ...tblHead, width: "25%" }}>{t("vodic.investicije.thIznos")}</th>
+                    <th style={{ ...tblHead, width: "25%" }}>{t("vodic.investicije.thNapomena")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1129,7 +1137,7 @@ function TabVodic() {
                     );
                   })}
                   <tr>
-                    <td style={tblTotal}>UKUPNO SREDSTVA (I + II)</td>
+                    <td style={tblTotal}>{t("vodic.investicije.totalSredstva")}</td>
                     <td style={tblTotal}>{totalSredstva.toLocaleString()} KM</td>
                     <td style={tblTotal}></td>
                   </tr>
@@ -1140,13 +1148,13 @@ function TabVodic() {
             {/* ── TABELA B: Izvori sredstava ── */}
             <div style={{ ...card, padding: 0, overflow: "hidden", marginBottom: 28 }}>
               <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 17, fontWeight: 800, color: C.redDark }}>B) Izvori sredstava</div>
+                <div style={{ fontSize: 17, fontWeight: 800, color: C.redDark }}>{t("vodic.investicije.tableB")}</div>
               </div>
               <table style={{ borderCollapse: "collapse", width: "100%" }}>
                 <thead>
                   <tr>
-                    <th style={{ ...tblHead, width: "60%" }}>Izvori</th>
-                    <th style={{ ...tblHead, width: "40%" }}>Iznos u KM</th>
+                    <th style={{ ...tblHead, width: "60%" }}>{t("vodic.investicije.thIzvori")}</th>
+                    <th style={{ ...tblHead, width: "40%" }}>{t("vodic.investicije.thIznos")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1170,7 +1178,7 @@ function TabVodic() {
                     );
                   })}
                   <tr>
-                    <td style={tblTotal}>UKUPNO IZVORI SREDSTAVA (I + II)</td>
+                    <td style={tblTotal}>{t("vodic.investicije.totalIzvori")}</td>
                     <td style={tblTotal}>{totalIzvori.toLocaleString()} KM</td>
                   </tr>
                 </tbody>
@@ -1180,36 +1188,36 @@ function TabVodic() {
             {/* ── TABELA C: Usklađivanje ── */}
             <div style={{ ...card, padding: 0, overflow: "hidden" }}>
               <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 17, fontWeight: 800, color: C.redDark }}>C) Usklađivanje ulaganja i izvora sredstava</div>
+                <div style={{ fontSize: 17, fontWeight: 800, color: C.redDark }}>{t("vodic.investicije.tableC")}</div>
               </div>
               <table style={{ borderCollapse: "collapse", width: "100%" }}>
                 <thead>
                   <tr>
-                    <th style={{ ...tblHead, width: "60%" }}>Elementi</th>
-                    <th style={{ ...tblHead, width: "40%" }}>Iznos u KM</th>
+                    <th style={{ ...tblHead, width: "60%" }}>{t("vodic.investicije.thElementi")}</th>
+                    <th style={{ ...tblHead, width: "40%" }}>{t("vodic.investicije.thIznos")}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td colSpan={2} style={tblSection}>I Ulaganja (sredstva)</td></tr>
+                  <tr><td colSpan={2} style={tblSection}>{usk.ulaganja}</td></tr>
                   <tr>
-                    <td style={{ ...tblCell, paddingLeft: 24 }}>1. Stalna sredstva</td>
+                    <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.stalna}</td>
                     <td style={{ ...tblCell, fontWeight: 600 }}>{totalStalna.toLocaleString()} KM</td>
                   </tr>
                   <tr>
-                    <td style={{ ...tblCell, paddingLeft: 24 }}>2. Tekuća sredstva</td>
+                    <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.tekuca}</td>
                     <td style={{ ...tblCell, fontWeight: 600 }}>{totalTekuca.toLocaleString()} KM</td>
                   </tr>
-                  <tr><td colSpan={2} style={tblSection}>II Izvori sredstava</td></tr>
+                  <tr><td colSpan={2} style={tblSection}>{usk.izvori}</td></tr>
                   <tr>
-                    <td style={{ ...tblCell, paddingLeft: 24 }}>3. Vlastita sredstva</td>
+                    <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.vlastita}</td>
                     <td style={{ ...tblCell, fontWeight: 600 }}>{totalVlastiti.toLocaleString()} KM</td>
                   </tr>
                   <tr>
-                    <td style={{ ...tblCell, paddingLeft: 24 }}>4. Tuđa sredstva</td>
+                    <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.tudja}</td>
                     <td style={{ ...tblCell, fontWeight: 600 }}>{totalTudi.toLocaleString()} KM</td>
                   </tr>
                   <tr>
-                    <td style={{ ...tblTotal, background: Math.abs(totalSredstva - totalIzvori) < 0.01 ? C.green : C.red }}>RAZLIKA (I − II)</td>
+                    <td style={{ ...tblTotal, background: Math.abs(totalSredstva - totalIzvori) < 0.01 ? C.green : C.red }}>{usk.razlika}</td>
                     <td style={{ ...tblTotal, background: Math.abs(totalSredstva - totalIzvori) < 0.01 ? C.green : C.red }}>
                       {(totalSredstva - totalIzvori).toLocaleString()} KM
                     </td>
@@ -1217,7 +1225,7 @@ function TabVodic() {
                 </tbody>
               </table>
               <div style={{ padding: "12px 20px", background: C.redLight, fontSize: 13, fontWeight: 600, color: C.redDark }}>
-                * Sredstva moraju biti jednaka izvorima sredstava!
+                {t("vodic.investicije.note")}
               </div>
             </div>
 
@@ -1227,10 +1235,10 @@ function TabVodic() {
                 ok={Math.abs(totalSredstva - totalIzvori) < 0.01 && totalSredstva > 0}
                 text={
                   totalSredstva === 0
-                    ? "Unesite sredstva i izvore"
+                    ? t("vodic.investicije.badgeEmpty")
                     : Math.abs(totalSredstva - totalIzvori) < 0.01
-                    ? "Sredstva = Izvori ✓ Bilans je uravnotežen"
-                    : `Razlika: ${(totalSredstva - totalIzvori).toLocaleString()} KM — sredstva moraju biti jednaka izvorima!`
+                    ? t("vodic.investicije.badgeOk")
+                    : t("vodic.investicije.badgeDiff", { diff: (totalSredstva - totalIzvori).toLocaleString() })
                 }
               />
             </div>
@@ -1254,36 +1262,36 @@ function TabVodic() {
         const ukKratkorocne = num(bp.dobavljaci) + num(bp.kratkorocniKrediti) + num(bp.ostaleKratkorocne);
         const ukPasiva = ukKapital + ukDugorocne + ukKratkorocne;
 
-        // Build paired rows: [aktivaR/b, aktivaLabel, aktivaKey, pasivaR/b, pasivaLabel, pasivaKey, type]
+        const bil = t("vodic.bilans");
+        const bA = bil.a;
+        const bP = bil.p;
+        const bS = bil.sections;
         const rows = [
-          // Section headers
-          { type: "section", aLabel: "A. STALNA SREDSTVA (1-3)", aValue: ukAktStalna, pLabel: "A. KAPITAL (1-2)", pValue: ukKapital },
-          { type: "row", aRb: "1.", aLabel: "Nematerijalna ulaganja", aKey: "nematerijalna", pRb: "1.", pLabel: "Vlastiti kapital", pKey: "vlastitiKapital" },
-          { type: "row", aRb: "2.", aLabel: "Materijalna ulaganja:", aKey: null, pRb: "2.", pLabel: "Ostalo (grantovi, poticaji države)", pKey: "ostaloKapital" },
-          { type: "sub", aLabel: "- Zemljište", aKey: "zemljiste", pRb: "", pLabel: "", pKey: null },
-          { type: "sub", aLabel: "- Objekti", aKey: "objekti", pRb: "", pLabel: "", pKey: null },
-          { type: "sub", aLabel: "- Oprema", aKey: "oprema", pRb: "", pLabel: "", pKey: null },
-          { type: "row", aRb: "3.", aLabel: "Ostala stalna sredstva", aKey: "ostalaStalna", pRb: "", pLabel: "", pKey: null },
-          // Section B
-          { type: "section", aLabel: "B. TEKUĆA SREDSTVA (4-7)", aValue: ukAktTekuca, pLabel: "B. DUGOROČNE OBAVEZE (3-4)", pValue: ukDugorocne },
-          { type: "row", aRb: "4.", aLabel: "Zalihe", aKey: "zalihe", pRb: "3.", pLabel: "Dugoročni kredit", pKey: "dugorocniKredit" },
-          { type: "row", aRb: "5.", aLabel: "Potraživanja od kupaca", aKey: "potrazivanja", pRb: "4.", pLabel: "Ostale dugor. obaveze", pKey: "ostaleDugorocne" },
-          // Section C on pasiva side
-          { type: "row_psection", aRb: "6.", aLabel: "Gotovina", aKey: "gotovina", pLabel: "C. KRATKOROČNE OBAVEZE (5-7)", pValue: ukKratkorocne },
-          { type: "row", aRb: "7.", aLabel: "Ostala tekuća sredstva", aKey: "ostalaTekuca", pRb: "5.", pLabel: "Dobavljači", pKey: "dobavljaci" },
-          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "6.", pLabel: "Kratkoročni krediti", pKey: "kratkorocniKrediti" },
-          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "7.", pLabel: "Ostale kratkor. obaveze", pKey: "ostaleKratkorocne" },
+          { type: "section", aLabel: bS.stalna, aValue: ukAktStalna, pLabel: bS.kapital, pValue: ukKapital },
+          { type: "row", aRb: "1.", aLabel: bA.nematerijalnaUlaganja, aKey: "nematerijalna", pRb: "1.", pLabel: bP.vlastitiKapital, pKey: "vlastitiKapital" },
+          { type: "row", aRb: "2.", aLabel: bA.materijalnaUlaganja, aKey: null, pRb: "2.", pLabel: bP.ostaloKapital, pKey: "ostaloKapital" },
+          { type: "sub", aLabel: bA.zemljiste, aKey: "zemljiste", pRb: "", pLabel: "", pKey: null },
+          { type: "sub", aLabel: bA.objekti, aKey: "objekti", pRb: "", pLabel: "", pKey: null },
+          { type: "sub", aLabel: bA.oprema, aKey: "oprema", pRb: "", pLabel: "", pKey: null },
+          { type: "row", aRb: "3.", aLabel: bA.ostalaStalna, aKey: "ostalaStalna", pRb: "", pLabel: "", pKey: null },
+          { type: "section", aLabel: bS.tekuca, aValue: ukAktTekuca, pLabel: bS.dugorocne, pValue: ukDugorocne },
+          { type: "row", aRb: "4.", aLabel: bA.zalihe, aKey: "zalihe", pRb: "3.", pLabel: bP.dugorocniKredit, pKey: "dugorocniKredit" },
+          { type: "row", aRb: "5.", aLabel: bA.potrazivanja, aKey: "potrazivanja", pRb: "4.", pLabel: bP.ostaleDugorocne, pKey: "ostaleDugorocne" },
+          { type: "row_psection", aRb: "6.", aLabel: bA.gotovina, aKey: "gotovina", pLabel: bS.kratkorocne, pValue: ukKratkorocne },
+          { type: "row", aRb: "7.", aLabel: bA.ostalaTekuca, aKey: "ostalaTekuca", pRb: "5.", pLabel: bP.dobavljaci, pKey: "dobavljaci" },
+          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "6.", pLabel: bP.kratkorocniKrediti, pKey: "kratkorocniKrediti" },
+          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "7.", pLabel: bP.ostaleKratkorocne, pKey: "ostaleKratkorocne" },
         ];
 
         return (
           <div>
-            <div style={sectionTitle}>4b. Finansijski plan: Bilans stanja i uspjeha</div>
+            <div style={sectionTitle}>{t("vodic.bilansPoc.title")}</div>
 
             {/* Date input */}
             <div style={{ ...card, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: 20 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: C.redDark }}>POČETNI BILANS STANJA na dan</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: C.redDark }}>{t("vodic.bilansPoc.dateLabel")}</span>
               <DateDMY value={data.bilansDatum} onChange={(v) => set("bilansDatum", v)} />
-              <span style={{ fontSize: 14, color: C.textMuted }}>(na početku poslovanja)</span>
+              <span style={{ fontSize: 14, color: C.textMuted }}>{t("vodic.bilansPoc.dateHint")}</span>
             </div>
 
             {/* Main bilans table */}
@@ -1292,12 +1300,12 @@ function TabVodic() {
                 <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 700 }}>
                   <thead>
                     <tr>
-                      <th style={{ ...bh, width: "5%" }}>R/b</th>
-                      <th style={{ ...bh, width: "28%" }}>Aktiva</th>
-                      <th style={{ ...bh, width: "17%", borderRight: divider }}>Iznos u KM</th>
-                      <th style={{ ...bh, width: "5%" }}>R/b</th>
-                      <th style={{ ...bh, width: "28%" }}>Pasiva</th>
-                      <th style={{ ...bh, width: "17%" }}>Iznos u KM</th>
+                      <th style={{ ...bh, width: "5%" }}>{bil.thRb}</th>
+                      <th style={{ ...bh, width: "28%" }}>{bil.thAktiva}</th>
+                      <th style={{ ...bh, width: "17%", borderRight: divider }}>{bil.thIznos}</th>
+                      <th style={{ ...bh, width: "5%" }}>{bil.thRb}</th>
+                      <th style={{ ...bh, width: "28%" }}>{bil.thPasiva}</th>
+                      <th style={{ ...bh, width: "17%" }}>{bil.thIznos}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1359,9 +1367,9 @@ function TabVodic() {
                     })}
                     {/* TOTALS */}
                     <tr>
-                      <td colSpan={2} style={bt}>UKUPNO AKTIVA (A+B):</td>
+                      <td colSpan={2} style={bt}>{bil.totalAktiva}</td>
                       <td style={{ ...bt, borderRight: divider }}>{ukAktiva.toLocaleString()} KM</td>
-                      <td colSpan={2} style={bt}>UKUPNO PASIVA (A+B+C):</td>
+                      <td colSpan={2} style={bt}>{bil.totalPasiva}</td>
                       <td style={bt}>{ukPasiva.toLocaleString()} KM</td>
                     </tr>
                   </tbody>
@@ -1375,10 +1383,14 @@ function TabVodic() {
                 ok={Math.abs(ukAktiva - ukPasiva) < 0.01 && ukAktiva > 0}
                 text={
                   ukAktiva === 0 && ukPasiva === 0
-                    ? "Unesite vrijednosti u bilans stanja"
+                    ? bil.badgeEmpty
                     : Math.abs(ukAktiva - ukPasiva) < 0.01
-                    ? "Bilans je uravnotežen (Aktiva = Pasiva) ✓"
-                    : `Bilans NIJE uravnotežen! Aktiva (${ukAktiva.toLocaleString()}) ≠ Pasiva (${ukPasiva.toLocaleString()}). Razlika: ${(ukAktiva - ukPasiva).toLocaleString()} KM`
+                    ? bil.badgeOk
+                    : t("vodic.bilans.badgeDiff", {
+                        aktiva: ukAktiva.toLocaleString(),
+                        pasiva: ukPasiva.toLocaleString(),
+                        diff: (ukAktiva - ukPasiva).toLocaleString(),
+                      })
                 }
               />
             </div>
@@ -1402,32 +1414,36 @@ function TabVodic() {
         const ukKratkorocne = num(bp.dobavljaci) + num(bp.kratkorocniKrediti) + num(bp.ostaleKratkorocne);
         const ukPasiva = ukKapital + ukDugorocne + ukKratkorocne;
 
+        const bil = t("vodic.bilans");
+        const bA = bil.a;
+        const bP = bil.p;
+        const bS = bil.sections;
         const rows = [
-          { type: "section", aLabel: "A. STALNA SREDSTVA (1-3)", aValue: ukAktStalna, pLabel: "A. KAPITAL (1-2)", pValue: ukKapital },
-          { type: "row", aRb: "1.", aLabel: "Nematerijalna sredstva", aKey: "nematerijalna", pRb: "1.", pLabel: "Vlastiti kapital", pKey: "vlastitiKapital" },
-          { type: "row", aRb: "2.", aLabel: "Materijalna sredstva:", aKey: null, pRb: "2.", pLabel: "Akumulirana dobit", pKey: "akumuliranaDobit" },
-          { type: "sub", aLabel: "- Zemljište", aKey: "zemljiste", pRb: "", pLabel: "", pKey: null },
-          { type: "sub", aLabel: "- Objekti", aKey: "objekti", pRb: "", pLabel: "", pKey: null },
-          { type: "sub", aLabel: "- Oprema", aKey: "oprema", pRb: "", pLabel: "", pKey: null },
-          { type: "row", aRb: "3.", aLabel: "Ostala stalna sredstva", aKey: "ostalaStalna", pRb: "", pLabel: "", pKey: null },
-          { type: "section", aLabel: "B. TEKUĆA SREDSTVA (4-7)", aValue: ukAktTekuca, pLabel: "B. DUGOROČNE OBAVEZE (3-4)", pValue: ukDugorocne },
-          { type: "row", aRb: "4.", aLabel: "Zalihe", aKey: "zalihe", pRb: "3.", pLabel: "Dugoročni kredit", pKey: "dugorocniKredit" },
-          { type: "row", aRb: "5.", aLabel: "Potraživanja od kupaca", aKey: "potrazivanja", pRb: "4.", pLabel: "Ostale dugor. obaveze", pKey: "ostaleDugorocne" },
-          { type: "row_psection", aRb: "6.", aLabel: "Novac", aKey: "novac", pLabel: "C. KRATKOROČNE OBAVEZE (5-7)", pValue: ukKratkorocne },
-          { type: "row", aRb: "7.", aLabel: "Ostala tekuća sredstva", aKey: "ostalaTekuca", pRb: "5.", pLabel: "Dobavljači", pKey: "dobavljaci" },
-          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "6.", pLabel: "Kratkoročni krediti", pKey: "kratkorocniKrediti" },
-          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "7.", pLabel: "Ostale kratkor. obaveze", pKey: "ostaleKratkorocne" },
+          { type: "section", aLabel: bS.stalna, aValue: ukAktStalna, pLabel: bS.kapital, pValue: ukKapital },
+          { type: "row", aRb: "1.", aLabel: bA.nematerijalnaSredstva, aKey: "nematerijalna", pRb: "1.", pLabel: bP.vlastitiKapital, pKey: "vlastitiKapital" },
+          { type: "row", aRb: "2.", aLabel: bA.materijalnaSredstva, aKey: null, pRb: "2.", pLabel: bP.akumuliranaDobit, pKey: "akumuliranaDobit" },
+          { type: "sub", aLabel: bA.zemljiste, aKey: "zemljiste", pRb: "", pLabel: "", pKey: null },
+          { type: "sub", aLabel: bA.objekti, aKey: "objekti", pRb: "", pLabel: "", pKey: null },
+          { type: "sub", aLabel: bA.oprema, aKey: "oprema", pRb: "", pLabel: "", pKey: null },
+          { type: "row", aRb: "3.", aLabel: bA.ostalaStalna, aKey: "ostalaStalna", pRb: "", pLabel: "", pKey: null },
+          { type: "section", aLabel: bS.tekuca, aValue: ukAktTekuca, pLabel: bS.dugorocne, pValue: ukDugorocne },
+          { type: "row", aRb: "4.", aLabel: bA.zalihe, aKey: "zalihe", pRb: "3.", pLabel: bP.dugorocniKredit, pKey: "dugorocniKredit" },
+          { type: "row", aRb: "5.", aLabel: bA.potrazivanja, aKey: "potrazivanja", pRb: "4.", pLabel: bP.ostaleDugorocne, pKey: "ostaleDugorocne" },
+          { type: "row_psection", aRb: "6.", aLabel: bA.novac, aKey: "novac", pLabel: bS.kratkorocne, pValue: ukKratkorocne },
+          { type: "row", aRb: "7.", aLabel: bA.ostalaTekuca, aKey: "ostalaTekuca", pRb: "5.", pLabel: bP.dobavljaci, pKey: "dobavljaci" },
+          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "6.", pLabel: bP.kratkorocniKrediti, pKey: "kratkorocniKrediti" },
+          { type: "row", aRb: "", aLabel: "", aKey: null, pRb: "7.", pLabel: bP.ostaleKratkorocne, pKey: "ostaleKratkorocne" },
         ];
 
         return (
           <div>
-            <div style={sectionTitle}>4i. Bilans stanja (na kraju poslovne godine)</div>
+            <div style={sectionTitle}>{t("vodic.bilansKraj.title")}</div>
 
             {/* Date input */}
             <div style={{ ...card, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: 20 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: C.redDark }}>BILANS STANJA na dan</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: C.redDark }}>{t("vodic.bilansKraj.dateLabel")}</span>
               <DateDMY value={data.bilansKrajDatum} onChange={(v) => set("bilansKrajDatum", v)} />
-              <span style={{ fontSize: 14, color: C.textMuted }}>(na kraju poslovne godine)</span>
+              <span style={{ fontSize: 14, color: C.textMuted }}>{t("vodic.bilansKraj.dateHint")}</span>
             </div>
 
             {/* Main bilans table */}
@@ -1436,12 +1452,12 @@ function TabVodic() {
                 <table style={{ borderCollapse: "collapse", width: "100%", minWidth: 700 }}>
                   <thead>
                     <tr>
-                      <th style={{ ...bh, width: "5%" }}>R/b</th>
-                      <th style={{ ...bh, width: "28%" }}>Aktiva</th>
-                      <th style={{ ...bh, width: "17%", borderRight: divider }}>Iznos u KM</th>
-                      <th style={{ ...bh, width: "5%" }}>R/b</th>
-                      <th style={{ ...bh, width: "28%" }}>Pasiva</th>
-                      <th style={{ ...bh, width: "17%" }}>Iznos u KM</th>
+                      <th style={{ ...bh, width: "5%" }}>{bil.thRb}</th>
+                      <th style={{ ...bh, width: "28%" }}>{bil.thAktiva}</th>
+                      <th style={{ ...bh, width: "17%", borderRight: divider }}>{bil.thIznos}</th>
+                      <th style={{ ...bh, width: "5%" }}>{bil.thRb}</th>
+                      <th style={{ ...bh, width: "28%" }}>{bil.thPasiva}</th>
+                      <th style={{ ...bh, width: "17%" }}>{bil.thIznos}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1503,9 +1519,9 @@ function TabVodic() {
                     })}
                     {/* TOTALS */}
                     <tr>
-                      <td colSpan={2} style={bt}>UKUPNO AKTIVA (A+B):</td>
+                      <td colSpan={2} style={bt}>{bil.totalAktiva}</td>
                       <td style={{ ...bt, borderRight: divider }}>{ukAktiva.toLocaleString()} KM</td>
-                      <td colSpan={2} style={bt}>UKUPNO PASIVA (A+B+C):</td>
+                      <td colSpan={2} style={bt}>{bil.totalPasiva}</td>
                       <td style={bt}>{ukPasiva.toLocaleString()} KM</td>
                     </tr>
                   </tbody>
@@ -1519,10 +1535,14 @@ function TabVodic() {
                 ok={Math.abs(ukAktiva - ukPasiva) < 0.01 && ukAktiva > 0}
                 text={
                   ukAktiva === 0 && ukPasiva === 0
-                    ? "Unesite vrijednosti u bilans stanja"
+                    ? bil.badgeEmpty
                     : Math.abs(ukAktiva - ukPasiva) < 0.01
-                    ? "Bilans je uravnotežen (Aktiva = Pasiva) ✓"
-                    : `Bilans NIJE uravnotežen! Aktiva (${ukAktiva.toLocaleString()}) ≠ Pasiva (${ukPasiva.toLocaleString()}). Razlika: ${(ukAktiva - ukPasiva).toLocaleString()} KM`
+                    ? bil.badgeOk
+                    : t("vodic.bilans.badgeDiff", {
+                        aktiva: ukAktiva.toLocaleString(),
+                        pasiva: ukPasiva.toLocaleString(),
+                        diff: (ukAktiva - ukPasiva).toLocaleString(),
+                      })
                 }
               />
             </div>
@@ -1530,17 +1550,27 @@ function TabVodic() {
         );
       }
 
-      case "plan_prodaje":
+      case "plan_prodaje": {
+        const pp = t("vodic.planProdaje");
+        const prodajaHeaders = [
+          pp.thNum, pp.thProizvod, pp.thCijena, pp.thMjesecni,
+          t("vodic.planProdaje.thGodisnji", { year: 2026 }),
+          t("vodic.planProdaje.thGodisnji", { year: 2027 }),
+          t("vodic.planProdaje.thGodisnji", { year: 2028 }),
+          t("vodic.planProdaje.thGodisnji", { year: 2029 }),
+          t("vodic.planProdaje.thGodisnji", { year: 2030 }),
+          "",
+        ];
         return (
           <div>
-            <div style={sectionTitle}>4c. Finansijski plan: Plan prodaje (2026–2030)</div>
-            <p style={sectionSub}>Unesite planirane prihode po proizvodima/uslugama. Mjesečni plan × 12 bi trebao biti ≈ godišnji plan za 2026.</p>
+            <div style={sectionTitle}>{pp.title}</div>
+            <p style={sectionSub}>{pp.sub}</p>
             <div style={{ overflowX: "auto" }}>
               <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: C.red, color: C.white }}>
-                    {["#", "Proizvod/Usluga", "Cijena po proizvodu (KM)", "Mjesečni plan 2026", "Godišnji plan 2026", "Godišnji plan 2027", "Godišnji plan 2028", "Godišnji plan 2029", "Godišnji plan 2030", ""].map((h) => (
-                      <th key={h} style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700, fontSize: 12 }}>{h}</th>
+                    {prodajaHeaders.map((h, hi) => (
+                      <th key={hi} style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700, fontSize: 12 }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -1549,7 +1579,7 @@ function TabVodic() {
                     <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
                       <td style={{ padding: 8, fontWeight: 600 }}>{i + 1}.</td>
                       <td style={{ padding: 4 }}>
-                        <input style={{ ...inputStyle, width: 140 }} value={p.naziv} onChange={(e) => set(`prodaja.${i}.naziv`, e.target.value)} placeholder="Naziv" />
+                        <input style={{ ...inputStyle, width: 140 }} value={p.naziv} onChange={(e) => set(`prodaja.${i}.naziv`, e.target.value)} placeholder={pp.phNaziv} />
                       </td>
                       {["cijena", "mj2026", "god2026", "god2027", "god2028", "god2029", "god2030"].map((k) => (
                         <td key={k} style={{ padding: 4 }}>
@@ -1566,7 +1596,7 @@ function TabVodic() {
                               }));
                             }}
                             style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 18, fontWeight: 700, padding: "4px 8px", borderRadius: 6 }}
-                            title="Obriši red"
+                            title={t("vodic.common.deleteRow")}
                           >
                             ×
                           </button>
@@ -1575,7 +1605,7 @@ function TabVodic() {
                     </tr>
                   ))}
                   <tr style={{ background: C.redLight, fontWeight: 700 }}>
-                    <td colSpan={3} style={{ padding: 10 }}>UKUPNO</td>
+                    <td colSpan={3} style={{ padding: 10 }}>{t("vodic.common.total")}</td>
                     <td style={{ padding: 10 }}>
                       {data.prodaja.reduce((sum, p) => sum + num(p.mj2026), 0).toLocaleString()} KM
                     </td>
@@ -1597,7 +1627,7 @@ function TabVodic() {
               }}
               style={{ ...btnPrimary, marginTop: 16, background: C.white, color: C.red, border: `2px solid ${C.red}`, display: "flex", alignItems: "center", gap: 8 }}
             >
-              <span style={{ fontSize: 20, lineHeight: 1 }}>+</span> Dodaj novi red
+              <span style={{ fontSize: 20, lineHeight: 1 }}>+</span> {t("vodic.common.addRow")}
             </button>
             {/* Auto checker: mj × 12 vs god */}
             <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -1605,22 +1635,23 @@ function TabVodic() {
                 const expected = num(p.mj2026) * 12;
                 const actual = num(p.god2026);
                 const ok = actual > 0 && Math.abs(expected - actual) <= expected * 0.2;
-                return <Badge key={i} ok={ok} text={`${p.naziv}: Mj×12=${expected.toLocaleString()}, God=${actual.toLocaleString()}`} />;
+                return <Badge key={i} ok={ok} text={t("vodic.planProdaje.badge", { name: p.naziv, expected: expected.toLocaleString(), actual: actual.toLocaleString() })} />;
               })}
             </div>
           </div>
         );
+      }
 
       case "plan_troskova":
         return (
           <div>
-            <div style={sectionTitle}>4d. Finansijski plan: Plan troškova (2026–2030)</div>
-            <p style={sectionSub}>Unesite planirane troškove po kategorijama. Mjesečni × 12 treba odgovarati godišnjem nivou.</p>
+            <div style={sectionTitle}>{t("vodic.planTroskova.title")}</div>
+            <p style={sectionSub}>{t("vodic.planTroskova.sub")}</p>
             <div style={{ overflowX: "auto" }}>
               <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: C.red, color: C.white }}>
-                    <th style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700, minWidth: 260 }}>Struktura troškova</th>
+                    <th style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700, minWidth: 260 }}>{t("vodic.planTroskova.thStruktura")}</th>
                     {costsLabels.map((h) => (
                       <th key={h} style={{ padding: "10px 8px", textAlign: "right", fontWeight: 700, fontSize: 12 }}>{h}</th>
                     ))}
@@ -1662,7 +1693,7 @@ function TabVodic() {
                     );
                   })}
                   <tr style={{ background: C.red }}>
-                    <td style={{ padding: 10, fontWeight: 800, color: C.white, fontSize: 14 }}>UKUPNO TROŠKOVI (1-5)</td>
+                    <td style={{ padding: 10, fontWeight: 800, color: C.white, fontSize: 14 }}>{t("vodic.planTroskova.totalRow")}</td>
                     {costsLabels.map((_, ci) => {
                       let total = 0;
                       Object.values(data.troskovi).forEach((arr) => { total += num(arr[ci]); });
@@ -1680,7 +1711,7 @@ function TabVodic() {
                 if (mjTotal > 0 && godTotal > 0) {
                   const expected = mjTotal * 12;
                   const ok = Math.abs(expected - godTotal) <= expected * 0.2;
-                  return <Badge ok={ok} text={`Mj. ukupno ×12 = ${expected.toLocaleString()} KM, God. ukupno = ${godTotal.toLocaleString()} KM`} />;
+                  return <Badge ok={ok} text={t("vodic.planTroskova.badge", { expected: expected.toLocaleString(), actual: godTotal.toLocaleString() })} />;
                 }
                 return null;
               })()}
@@ -1688,17 +1719,20 @@ function TabVodic() {
           </div>
         );
 
-      case "amortizacija":
+      case "amortizacija": {
+        const amT = t("vodic.amortizacija");
+        const amortHeaders = [amT.thOpis, amT.thNabavna, amT.thStopa, "2026", "2027", "2028", "2029", "2030", amT.thUkupno, ""];
+        const legalRows = amT.legalRows;
         return (
           <div>
-            <div style={sectionTitle}>4e. Finansijski plan: Obračun Amortizacije</div>
-            <p style={sectionSub}>Unesite stalna sredstva, nabavnu vrijednost i stopu amortizacije. Amortizacija se računa automatski (linearna metoda).</p>
+            <div style={sectionTitle}>{amT.title}</div>
+            <p style={sectionSub}>{amT.sub}</p>
             <div style={{ overflowX: "auto" }}>
               <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: C.red, color: C.white }}>
-                    {["Opis sredstva", "Nabavna vrij. (KM)", "Stopa (%)", "2026", "2027", "2028", "2029", "2030", "UKUPNO", ""].map((h) => (
-                      <th key={h} style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700 }}>{h}</th>
+                    {amortHeaders.map((h, hi) => (
+                      <th key={hi} style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700 }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -1709,7 +1743,7 @@ function TabVodic() {
                     return (
                       <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
                         <td style={{ padding: 4 }}>
-                          <input style={{ ...inputStyle, width: 160 }} value={a.opis} onChange={(e) => set(`amort.${i}.opis`, e.target.value)} placeholder="npr. Računar" />
+                          <input style={{ ...inputStyle, width: 160 }} value={a.opis} onChange={(e) => set(`amort.${i}.opis`, e.target.value)} placeholder={amT.phOpis} />
                         </td>
                         <td style={{ padding: 4 }}><TableInput value={a.nabavna} onChange={(v) => set(`amort.${i}.nabavna`, v)} /></td>
                         <td style={{ padding: 4 }}><TableInput value={a.stopa} onChange={(v) => set(`amort.${i}.stopa`, v)} width={70} /></td>
@@ -1722,7 +1756,7 @@ function TabVodic() {
                             <button
                               onClick={() => setData((prev) => ({ ...prev, amort: prev.amort.filter((_, idx) => idx !== i) }))}
                               style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 18, fontWeight: 700, padding: "4px 8px" }}
-                              title="Obriši red"
+                              title={t("vodic.common.deleteRow")}
                             >×</button>
                           )}
                         </td>
@@ -1730,7 +1764,7 @@ function TabVodic() {
                     );
                   })}
                   <tr style={{ background: C.redLight, fontWeight: 700 }}>
-                    <td colSpan={3} style={{ padding: 10 }}>UKUPNO</td>
+                    <td colSpan={3} style={{ padding: 10 }}>{t("vodic.common.total")}</td>
                     {amortGodisnje.map((v, i) => (
                       <td key={i} style={{ padding: 10, textAlign: "right" }}>{v.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
                     ))}
@@ -1745,38 +1779,29 @@ function TabVodic() {
               onClick={() => setData((prev) => ({ ...prev, amort: [...prev.amort, { opis: "", nabavna: 0, stopa: 0 }] }))}
               style={{ ...btnPrimary, marginTop: 16, background: C.white, color: C.red, border: `2px solid ${C.red}`, display: "flex", alignItems: "center", gap: 8 }}
             >
-              <span style={{ fontSize: 20, lineHeight: 1 }}>+</span> Dodaj novi red
+              <span style={{ fontSize: 20, lineHeight: 1 }}>+</span> {t("vodic.common.addRow")}
             </button>
             <div style={{ ...card, marginTop: 16, background: C.redLight, borderColor: C.redMid, padding: 20 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: C.redDark }}>
-                ℹ️ Stopa amortizacije se unosi kao procenat (npr. 20 za 20%). Pogledajte Zakon o porezu na dobit za propisane stope.
+                {amT.note}
               </div>
             </div>
 
             {/* Legal reference: Zakon o porezu na dobit, Član 19 */}
             <div style={{ ...card, marginTop: 16, padding: 0, overflow: "hidden" }}>
               <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}`, background: C.redLight }}>
-                <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>Zakonom propisane stope amortizacije — Član 19.</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>{amT.legalTitle}</div>
               </div>
               <div style={{ padding: 20 }}>
                 <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, marginBottom: 14 }}>
-                  (1) Kod utvrđivanja porezne osnovice priznaje se obračunata amortizacija primjenom proporcionalne metode amortizacije na dugotrajnu imovinu na način propisan ovim člankom.
+                  {amT.legal1}
                 </p>
                 <p style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 10 }}>
-                  (2) Porezno priznate stope amortizacije dugotrajne imovine iznose:
+                  {amT.legal2}
                 </p>
                 <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 13, marginBottom: 16 }}>
                   <tbody>
-                    {[
-                      ["a)", "Građevinski objekti", "5%"],
-                      ["b)", "Ceste, komunalni objekti, željeznica", "10%"],
-                      ["c)", "Oprema, vozila, postrojenja", "15%"],
-                      ["d)", "Oprema za vodoprivredne, vodovodne i kanalizacijske sustave", "15%"],
-                      ["e)", "Hardver i softver i oprema za zaštitu okoliša", "33,3%"],
-                      ["f)", "Višegodišnji zasadi", "15%"],
-                      ["g)", "Osnovna stada", "40%"],
-                      ["h)", "Nematerijalna imovina", "20%"],
-                    ].map(([slovo, opis, stopa], i) => (
+                    {legalRows.map(([slovo, opis, stopa], i) => (
                       <tr key={i} style={{ borderBottom: `1px solid ${C.borderLight}` }}>
                         <td style={{ padding: "8px 6px", fontWeight: 700, color: C.red, width: 28 }}>{slovo}</td>
                         <td style={{ padding: "8px 6px", color: C.text }}>{opis}</td>
@@ -1786,50 +1811,52 @@ function TabVodic() {
                   </tbody>
                 </table>
                 <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6, marginBottom: 10 }}>
-                  (4) Ukoliko je nabavna cijena imovine manja od 1.000,00 KM, njezina nabavna vrijednost može se u cijelosti otpisati u godini u kojoj je ta imovina nabavljena.
+                  {amT.legal4}
                 </p>
                 <p style={{ fontSize: 13, color: C.textMuted, lineHeight: 1.6 }}>
-                  (5) Dugotrajna imovina koja je u cijelosti otpisana, ali se i dalje vodi u evidencijama do momenta otuđenja ili uništavanja, ne može se ponovno procjenjivati i na nju obračunavati amortizacija i priznati u porezne svrhe.
+                  {amT.legal5}
                 </p>
               </div>
             </div>
           </div>
         );
+      }
 
       case "kredit": {
+        const kr = t("vodic.kredit");
         const kh = { background: C.red, color: C.white, padding: "10px 8px", textAlign: "right", fontWeight: 700, fontSize: 12 };
         const kc = { padding: "6px 8px", borderBottom: `1px solid ${C.border}`, fontSize: 13, textAlign: "right" };
         const fmt = (v) => num(v).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         return (
           <div>
-            <div style={sectionTitle}>4f. Finansijski plan: Otplatni plan kredita</div>
+            <div style={sectionTitle}>{kr.title}</div>
 
             {/* Inicijalni podaci */}
             <div style={{ ...card, padding: 0, overflow: "hidden", marginBottom: 24 }}>
               <div style={{ padding: "14px 20px", background: C.redLight, borderBottom: `1px solid ${C.border}` }}>
-                <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>Inicijalni podaci o pozajmici</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>{kr.initTitle}</div>
               </div>
               <div style={{ padding: 20 }}>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
                   <div>
-                    <Field lbl="Iznos kredita (KM)" tip="Ukupan iznos pozajmice.">
+                    <Field lbl={kr.iznosLbl} tip={kr.iznosTip}>
                       <TableInput value={data.kredit.iznos} onChange={(v) => set("kredit.iznos", v)} width="100%" />
                     </Field>
-                    <Field lbl="Kamata (% godišnje)" tip="Godišnja kamatna stopa, npr. 3.49%.">
+                    <Field lbl={kr.kamataLbl} tip={kr.kamataTip}>
                       <TableInput value={data.kredit.kamata} onChange={(v) => set("kredit.kamata", v)} width="100%" />
                     </Field>
-                    <Field lbl="Rok otplate (mjeseci)" tip="Ukupan rok trajanja kredita u mjesecima, uključujući grace period (npr. 60 mjeseci ukupno, od čega 12 mjeseci grace).">
+                    <Field lbl={kr.rokLbl} tip={kr.rokTip}>
                       <TableInput value={data.kredit.rok} onChange={(v) => set("kredit.rok", v)} width="100%" />
                     </Field>
                   </div>
                   <div>
-                    <Field lbl="Učešće (KM)" tip="Iznos vlastitog učešća (umanjuje osnovicu kredita).">
+                    <Field lbl={kr.ucesceLbl} tip={kr.ucesceTip}>
                       <TableInput value={data.kredit.ucesce} onChange={(v) => set("kredit.ucesce", v)} width="100%" />
                     </Field>
-                    <Field lbl="Grace period (mjeseci)" tip="Period u kojem se plaća samo kamata, bez glavnice.">
+                    <Field lbl={kr.graceLbl} tip={kr.graceTip}>
                       <TableInput value={data.kredit.grace} onChange={(v) => set("kredit.grace", v)} width="100%" />
                     </Field>
-                    <Field lbl="Datum prve rate" tip="Datum kada počinje otplata (nakon grace perioda).">
+                    <Field lbl={kr.datumLbl} tip={kr.datumTip}>
                       <input type="date" value={data.kredit.datumPrveRate} onChange={(e) => set("kredit.datumPrveRate", e.target.value)} style={{ ...inputStyle, fontWeight: 600 }} />
                     </Field>
                   </div>
@@ -1842,23 +1869,23 @@ function TabVodic() {
                 {/* Preračuni */}
                 <div style={{ ...card, padding: 0, overflow: "hidden", marginBottom: 24 }}>
                   <div style={{ padding: "14px 20px", background: C.redLight, borderBottom: `1px solid ${C.border}` }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>Preračuni</div>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>{kr.calcTitle}</div>
                   </div>
                   <div style={{ padding: 20 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 14 }}>
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>Osnovica za kredit:</strong></div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.osnovica}</strong></div>
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.osnovica)} KM</div>
 
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>Kamata grace perioda:</strong></div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.graceKamata}</strong></div>
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.graceKamata)} KM</div>
 
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>Kamata u otplati:</strong></div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.kamataUOtplati}</strong></div>
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.kamatuUOtplati)} KM</div>
 
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>Ukupna kamata:</strong></div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.ukupnaKamata}</strong></div>
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.ukupnaKamata)} KM</div>
 
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>Ukupno zaduženje:</strong></div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.ukupnoZaduzenje}</strong></div>
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.ukupnoZaduzenje)} KM</div>
                     </div>
                   </div>
@@ -1867,15 +1894,15 @@ function TabVodic() {
                 {/* Iznos rate */}
                 <div style={{ ...card, padding: 0, overflow: "hidden", marginBottom: 24 }}>
                   <div style={{ padding: "14px 20px", background: C.redLight, borderBottom: `1px solid ${C.border}` }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>Iznos rate</div>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>{kr.rataTitle}</div>
                   </div>
                   <div style={{ padding: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, fontSize: 14 }}>
                     <div style={{ padding: 16, background: C.bg, borderRadius: 10, textAlign: "center" }}>
-                      <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>Rata u grace periodu</div>
+                      <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{kr.graceRata}</div>
                       <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>{fmt(kreditInfo.graceRata)} KM</div>
                     </div>
                     <div style={{ padding: 16, background: C.bg, borderRadius: 10, textAlign: "center" }}>
-                      <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>Izračunata rata</div>
+                      <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{kr.izracunataRata}</div>
                       <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>{fmt(kreditInfo.rata)} KM</div>
                     </div>
                   </div>
@@ -1884,19 +1911,19 @@ function TabVodic() {
                 {/* Otplatni plan tabela */}
                 <div style={{ ...card, padding: 0, overflow: "hidden" }}>
                   <div style={{ padding: "14px 20px", background: C.redLight, borderBottom: `1px solid ${C.border}` }}>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>OTPLATNI PLAN</div>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: C.redDark }}>{kr.planTitle}</div>
                   </div>
                   <div style={{ overflowX: "auto", maxHeight: 500, overflowY: "auto" }}>
                     <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 13 }}>
                       <thead style={{ position: "sticky", top: 0 }}>
                         <tr>
-                          <th style={{ ...kh, textAlign: "center" }}>BR.</th>
-                          <th style={kh}>Datum rate</th>
-                          <th style={kh}>Početno zaduženje</th>
-                          <th style={kh}>Platiti kamatu</th>
-                          <th style={kh}>Platiti glavnicu</th>
-                          <th style={kh}>Ostatak zaduženja</th>
-                          <th style={kh}>Kumulativna kamata</th>
+                          <th style={{ ...kh, textAlign: "center" }}>{kr.thBr}</th>
+                          <th style={kh}>{kr.thDatum}</th>
+                          <th style={kh}>{kr.thZaduzenje}</th>
+                          <th style={kh}>{kr.thKamata}</th>
+                          <th style={kh}>{kr.thGlavnica}</th>
+                          <th style={kh}>{kr.thOstatak}</th>
+                          <th style={kh}>{kr.thKumKamata}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1922,6 +1949,7 @@ function TabVodic() {
       }
 
       case "normativi": {
+        const nm = t("vodic.normativi");
         const nh = { background: C.red, color: C.white, padding: "8px 8px", textAlign: "center", fontWeight: 700, fontSize: 12 };
         const proizvodi = data.normativiProizvodi;
 
@@ -1942,33 +1970,30 @@ function TabVodic() {
 
         return (
           <div>
-            <div style={sectionTitle}>4g. Finansijski plan: Normativi i cijene sirovina i materijala (za proizvodnu djelatnost)</div>
-            <p style={sectionSub}>
-              Unesite direktne sirovine i materijal potrebne za proizvodnju, jedinicu mjere, cijenu koštanja po jedinici mjere,
-              nazive proizvoda, te potrebnu količinu (normativ) za svaki proizvod.
-            </p>
+            <div style={sectionTitle}>{nm.title}</div>
+            <p style={sectionSub}>{nm.sub}</p>
             <div style={{ overflowX: "auto" }}>
               <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 13 }}>
                 <thead>
                   <tr>
-                    <th style={{ ...nh, textAlign: "left", minWidth: 200 }} rowSpan={2}>Direktne sirovine i materijal</th>
-                    <th style={{ ...nh, minWidth: 90 }} rowSpan={2}>Jed. mjere</th>
-                    <th style={{ ...nh, minWidth: 110 }} rowSpan={2}>Cijena koštanja po jedinici mjere (KM)</th>
+                    <th style={{ ...nh, textAlign: "left", minWidth: 200 }} rowSpan={2}>{nm.thSirovine}</th>
+                    <th style={{ ...nh, minWidth: 90 }} rowSpan={2}>{nm.thJedMjere}</th>
+                    <th style={{ ...nh, minWidth: 110 }} rowSpan={2}>{nm.thCijena}</th>
                     {proizvodi.map((_, pi) => (
                       <th key={pi} style={{ ...nh, minWidth: 130 }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center" }}>
-                          <span>Proizvod Br.{pi + 1}</span>
+                          <span>{t("vodic.normativi.productNo", { n: pi + 1 })}</span>
                           <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                             <input
                               value={proizvodi[pi]}
                               onChange={(e) => set(`normativiProizvodi.${pi}`, e.target.value)}
-                              placeholder="Naziv proizvoda"
+                              placeholder={nm.phProductName}
                               style={{ width: "100%", padding: "5px 8px", borderRadius: 6, border: "none", fontSize: 12, textAlign: "center", color: C.text }}
                             />
                             {proizvodi.length > 1 && (
                               <button
                                 onClick={() => removeProduct(pi)}
-                                title="Obriši proizvod"
+                                title={nm.deleteProduct}
                                 style={{ background: "rgba(255,255,255,.25)", border: "none", color: C.white, cursor: "pointer", fontSize: 14, fontWeight: 700, borderRadius: 4, width: 20, height: 20, lineHeight: 1, flexShrink: 0 }}
                               >×</button>
                             )}
@@ -1979,7 +2004,7 @@ function TabVodic() {
                     <th style={nh} rowSpan={2}>
                       <button
                         onClick={addProduct}
-                        title="Dodaj proizvod"
+                        title={nm.addProduct}
                         style={{ background: C.white, border: "none", color: C.red, cursor: "pointer", fontSize: 16, fontWeight: 800, borderRadius: 6, width: 28, height: 28, lineHeight: 1 }}
                       >+</button>
                     </th>
@@ -1995,7 +2020,7 @@ function TabVodic() {
                             style={{ ...inputStyle, minWidth: 150 }}
                             value={n.naziv}
                             onChange={(e) => set(`normativi.${i}.naziv`, e.target.value)}
-                            placeholder="npr. Brašno"
+                            placeholder={nm.phSirovina}
                           />
                         </div>
                       </td>
@@ -2004,7 +2029,7 @@ function TabVodic() {
                           style={{ ...inputStyle, width: 80, textAlign: "center" }}
                           value={n.jedMjere}
                           onChange={(e) => set(`normativi.${i}.jedMjere`, e.target.value)}
-                          placeholder="kg/l/kom"
+                          placeholder={nm.phJedMjere}
                         />
                       </td>
                       <td style={{ padding: 4 }}>
@@ -2024,7 +2049,7 @@ function TabVodic() {
                           <button
                             onClick={() => setData((prev) => ({ ...prev, normativi: prev.normativi.filter((_, idx) => idx !== i) }))}
                             style={{ background: "none", border: "none", color: C.red, cursor: "pointer", fontSize: 18, fontWeight: 700, padding: "4px 8px" }}
-                            title="Obriši red"
+                            title={t("vodic.common.deleteRow")}
                           >×</button>
                         )}
                       </td>
@@ -2032,7 +2057,7 @@ function TabVodic() {
                   ))}
                   {/* Cijena koštanja po proizvodu — zbir (normativ × cijena) za svaki proizvod */}
                   <tr style={{ background: C.redLight, fontWeight: 700 }}>
-                    <td colSpan={3} style={{ padding: 10 }}>UKUPNA CIJENA KOŠTANJA MATERIJALA PO PROIZVODU</td>
+                    <td colSpan={3} style={{ padding: 10 }}>{nm.totalRow}</td>
                     {proizvodi.map((_, pi) => {
                       const total = data.normativi.reduce((sum, n) => sum + num(n.cijena) * num(n.kolicine[pi]), 0);
                       return <td key={pi} style={{ padding: 10, textAlign: "center" }}>{total.toLocaleString(undefined, { maximumFractionDigits: 2 })} KM</td>;
@@ -2050,26 +2075,24 @@ function TabVodic() {
               }))}
               style={{ ...btnPrimary, marginTop: 16, background: C.white, color: C.red, border: `2px solid ${C.red}`, display: "flex", alignItems: "center", gap: 8 }}
             >
-              <span style={{ fontSize: 20, lineHeight: 1 }}>+</span> Dodaj novi red
+              <span style={{ fontSize: 20, lineHeight: 1 }}>+</span> {t("vodic.common.addRow")}
             </button>
             <div style={{ ...card, marginTop: 16, background: C.redLight, borderColor: C.redMid, padding: 20 }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: C.redDark }}>
-                ℹ️ Unesite naziv svakog proizvoda u zaglavlju tabele. Vrijednosti u kolonama predstavljaju normativ — potrebnu
-                količinu date sirovine/materijala (u jedinici mjere) za proizvodnju jedne jedinice tog proizvoda. Ukupna cijena
-                koštanja materijala po proizvodu se automatski izračunava kao zbir (cijena po jedinici × normativ) za sve sirovine.
-                Dugme "+" u zaglavlju dodaje novi proizvod, a "×" ga uklanja.
+                {nm.note}
               </div>
             </div>
           </div>
         );
       }
 
-      case "bilans_uspjeha":
+      case "bilans_uspjeha": {
+        const bu = t("vodic.bilansUspjeha");
         return (
           <div>
-            <div style={sectionTitle}>4h. Finansijski plan: Bilans uspjeha (2026–2030)</div>
-            <p style={sectionSub}>Automatski generisan na osnovu plana prodaje i plana troškova. Unesite eventualne ostale prihode.</p>
-            <Field lbl="Ostali prihodi po godinama (2026–2030)">
+            <div style={sectionTitle}>{bu.title}</div>
+            <p style={sectionSub}>{bu.sub}</p>
+            <Field lbl={bu.ostaliPrihodiLbl}>
               <div style={{ display: "flex", gap: 8 }}>
                 {data.ostaliPrihodi.map((v, i) => (
                   <div key={i}>
@@ -2087,7 +2110,7 @@ function TabVodic() {
               <table style={{ borderCollapse: "collapse", width: "100%", fontSize: 14 }}>
                 <thead>
                   <tr style={{ background: C.red, color: C.white }}>
-                    <th style={{ padding: 10, textAlign: "left" }}>ELEMENTI</th>
+                    <th style={{ padding: 10, textAlign: "left" }}>{bu.thElementi}</th>
                     {[2026, 2027, 2028, 2029, 2030].map((y) => (
                       <th key={y} style={{ padding: 10, textAlign: "right" }}>{y}.</th>
                     ))}
@@ -2114,13 +2137,13 @@ function TabVodic() {
                       );
                     };
 
-                    addRow("I. UKUPNI PRIHODI", ukPrihodi, true, C.redLight);
-                    addRow("  1. Prihodi od prodaje", prihodi, false);
-                    addRow("  2. Ostali prihodi", data.ostaliPrihodi.map(num), false);
-                    addRow("II. UKUPNI RASHODI", ukupniTroskovi, true, C.redLight);
-                    addRow("III. BRUTO DOBIT (I−II)", brutoDobit, true);
-                    addRow("  Porez na dobit (10%)", porez, false);
-                    addRow("IV. NETO DOBIT", netoDobit, true, C.greenBg);
+                    addRow(bu.rowPrihodi, ukPrihodi, true, C.redLight);
+                    addRow(bu.rowProdaja, prihodi, false);
+                    addRow(bu.rowOstali, data.ostaliPrihodi.map(num), false);
+                    addRow(bu.rowRashodi, ukupniTroskovi, true, C.redLight);
+                    addRow(bu.rowBruto, brutoDobit, true);
+                    addRow(bu.rowPorez, porez, false);
+                    addRow(bu.rowNeto, netoDobit, true, C.greenBg);
                     return rows;
                   })()}
                 </tbody>
@@ -2135,31 +2158,38 @@ function TabVodic() {
                   <Badge
                     key={i}
                     ok={profit >= 0}
-                    text={`${2026 + i}: ${profit >= 0 ? "Profitabilno" : "Gubitak"} (${profit.toLocaleString()} KM)`}
+                    text={t("vodic.bilansUspjeha.badge", {
+                      year: 2026 + i,
+                      status: profit >= 0 ? bu.profitable : bu.loss,
+                      amount: profit.toLocaleString(),
+                    })}
                   />
                 );
               })}
             </div>
           </div>
         );
+      }
 
-      case "sazetak":
+      case "sazetak": {
+        const sz = t("vodic.sazetak");
+        const stats = sz.stats;
         return (
           <div>
-            <div style={sectionTitle}>Sažetak & Završna provjera</div>
-            <p style={sectionSub}>Pregledajte sve unose i pokrenite automatsku provjeru konzistentnosti podataka.</p>
+            <div style={sectionTitle}>{sz.title}</div>
+            <p style={sectionSub}>{sz.sub}</p>
 
             <button
               style={{ ...btnPrimary, marginBottom: 24 }}
               onClick={() => validate()}
             >
-              ▶ Pokreni automatsku provjeru
+              {sz.runCheck}
             </button>
 
             {errors.length > 0 && (
               <div style={{ ...card, background: C.errorBg, borderColor: C.redMid }}>
                 <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 12 }}>
-                  Pronađeno {errors.length} problem{errors.length === 1 ? "" : "a"}:
+                  {errors.length === 1 ? t("vodic.sazetak.problemsOne", { n: errors.length }) : t("vodic.sazetak.problemsMany", { n: errors.length })}
                 </div>
                 {errors.map((e, i) => (
                   <div key={i} style={{ fontSize: 14, color: C.redDark, padding: "6px 0", borderBottom: i < errors.length - 1 ? `1px solid ${C.redMid}` : "none" }}>
@@ -2172,29 +2202,29 @@ function TabVodic() {
             {errors.length === 0 && errors !== null && (
               <div style={{ ...card, background: C.greenBg, borderColor: "#B5E3C8" }}>
                 <div style={{ fontSize: 16, fontWeight: 700, color: C.green }}>
-                  ✓ Sve provjere su prošle! Vaš biznis plan je konzistentan.
+                  {sz.allOk}
                 </div>
               </div>
             )}
 
-            <Field lbl="Sažetak finansijskog plana" tip="Napišite kratak rezime vašeg finansijskog plana po ključnim elementima.">
+            <Field lbl={sz.sazetakLbl} tip={sz.sazetakTip}>
               <textarea
                 style={{ ...textareaStyle, minHeight: 140 }}
                 value={data.sazetak}
                 onChange={(e) => set("sazetak", e.target.value)}
-                placeholder="Rezime finansijskog plana: ukupna ulaganja, izvori finansiranja, očekivani prihodi, profitabilnost..."
+                placeholder={sz.sazetakPh}
               />
             </Field>
 
             {/* Quick stats */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, marginTop: 12 }}>
               {[
-                ["Ukupna ulaganja", `${totalSredstva.toLocaleString()} KM`],
-                ["Vlastiti kapital", `${totalVlastiti.toLocaleString()} KM`],
-                ["Tuđi kapital", `${totalTudi.toLocaleString()} KM`],
-                ["Prihodi 2026", `${prihodi[0].toLocaleString()} KM`],
-                ["Troškovi 2026", `${ukupniTroskovi[0].toLocaleString()} KM`],
-                ["Neto dobit 2026", `${((prihodi[0] + num(data.ostaliPrihodi[0]) - ukupniTroskovi[0]) * 0.9).toLocaleString(undefined, { maximumFractionDigits: 0 })} KM`],
+                [stats.ulaganja, `${totalSredstva.toLocaleString()} KM`],
+                [stats.vlastiti, `${totalVlastiti.toLocaleString()} KM`],
+                [stats.tudji, `${totalTudi.toLocaleString()} KM`],
+                [stats.prihodi, `${prihodi[0].toLocaleString()} KM`],
+                [stats.troskovi, `${ukupniTroskovi[0].toLocaleString()} KM`],
+                [stats.neto, `${((prihodi[0] + num(data.ostaliPrihodi[0]) - ukupniTroskovi[0]) * 0.9).toLocaleString(undefined, { maximumFractionDigits: 0 })} KM`],
               ].map(([l, v]) => (
                 <div key={l} style={{ ...card, padding: 18, textAlign: "center", marginBottom: 0 }}>
                   <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{l}</div>
@@ -2219,14 +2249,15 @@ function TabVodic() {
                   cursor: pdfExporting ? "wait" : "pointer",
                 }}
               >
-                {pdfExporting ? "⏳ Generišem PDF..." : "📄 Izvezi kompletan biznis plan u PDF"}
+                {pdfExporting ? sz.pdfExporting : sz.pdfExport}
               </button>
               <p style={{ fontSize: 12, color: C.textMuted, marginTop: 10 }}>
-                Preuzima se pravi PDF fajl (.pdf) sa kompletnim biznis planom.
+                {sz.pdfNote}
               </p>
             </div>
           </div>
         );
+      }
 
       default:
         return null;
@@ -2258,32 +2289,37 @@ function TabVodic() {
     totalRow: { fontWeight: 800, background: "#FDE8EC" },
   };
 
+  const pdfT = t("pdf");
+  const pdfInv = pdfT.inv;
+  const pdfIzv = pdfT.izv;
+  const pdfBil = pdfT.bil;
+
   const printReport = (
     <div ref={printReportRef} style={{ display: "none" }}>
       <div style={pr.page}>
-        <div style={pr.h1}>BIZNIS PLAN — {data.naziv || "(bez naziva)"}</div>
+        <div style={pr.h1}>{t("pdf.docTitle", { name: data.naziv || t("pdf.untitled") })}</div>
         <div style={pr.metaLine}>
-          Autori: {data.autori || "—"} &nbsp;|&nbsp; Univerzitet FINRA &nbsp;|&nbsp;
-          Datum generisanja: {new Date().toLocaleDateString("bs-BA")}
+          {pdfT.authors}: {data.autori || "—"} &nbsp;|&nbsp; {pdfT.university} &nbsp;|&nbsp;
+          {pdfT.generated}: {new Date().toLocaleDateString(dateLocale)}
         </div>
 
         {/* 1. Ključna strategija */}
         <div style={pr.section}>
-          <div style={pr.h2}>1. Ključna strategija</div>
-          <div style={pr.h3}>Vizija</div><div style={pr.p}>{data.vizija || "—"}</div>
-          <div style={pr.h3}>Misija</div><div style={pr.p}>{data.misija || "—"}</div>
-          <div style={pr.h3}>Proizvod / Usluga</div><div style={pr.p}>{data.proizvod || "—"}</div>
-          <div style={pr.h3}>Nova vrijednost</div><div style={pr.p}>{data.novaVrijednost || "—"}</div>
-          <div style={pr.h3}>Ciljno tržište</div><div style={pr.p}>{data.ciljnoTrziste || "—"}</div>
+          <div style={pr.h2}>{pdfT.s1}</div>
+          <div style={pr.h3}>{pdfT.vizija}</div><div style={pr.p}>{data.vizija || "—"}</div>
+          <div style={pr.h3}>{pdfT.misija}</div><div style={pr.p}>{data.misija || "—"}</div>
+          <div style={pr.h3}>{pdfT.proizvod}</div><div style={pr.p}>{data.proizvod || "—"}</div>
+          <div style={pr.h3}>{pdfT.novaVrijednost}</div><div style={pr.p}>{data.novaVrijednost || "—"}</div>
+          <div style={pr.h3}>{pdfT.ciljnoTrziste}</div><div style={pr.p}>{data.ciljnoTrziste || "—"}</div>
         </div>
 
         {/* 2. Resursi & SWOT */}
         <div style={pr.section}>
-          <div style={pr.h2}>2. Resursi & SWOT analiza</div>
-          <div style={pr.h3}>Ključne kompetencije</div><div style={pr.p}>{data.kompetencije || "—"}</div>
-          <div style={pr.h3}>Ključna imovina</div><div style={pr.p}>{data.imovina || "—"}</div>
+          <div style={pr.h2}>{pdfT.s2}</div>
+          <div style={pr.h3}>{pdfT.kompetencije}</div><div style={pr.p}>{data.kompetencije || "—"}</div>
+          <div style={pr.h3}>{pdfT.imovina}</div><div style={pr.p}>{data.imovina || "—"}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Snage</th><th style={pr.th}>Slabosti</th><th style={pr.th}>Mogućnosti</th><th style={pr.th}>Prijetnje</th></tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.snage}</th><th style={pr.th}>{pdfT.slabosti}</th><th style={pr.th}>{pdfT.mogucnosti}</th><th style={pr.th}>{pdfT.prijetnje}</th></tr></thead>
             <tbody><tr>
               <td style={pr.td}>{data.swot.snage || "—"}</td>
               <td style={pr.td}>{data.swot.slabosti || "—"}</td>
@@ -2295,64 +2331,64 @@ function TabVodic() {
 
         {/* 3. Operacije */}
         <div style={pr.section}>
-          <div style={pr.h2}>3. Operacije</div>
-          <div style={pr.h3}>Proizvodnja / Usluge</div><div style={pr.p}>{data.proizvodnja || "—"}</div>
-          <div style={pr.h3}>Promocija & Kanali distribucije</div><div style={pr.p}>{data.promocija || "—"}</div>
-          <div style={pr.h3}>Ključni partneri</div><div style={pr.p}>{data.partneri || "—"}</div>
+          <div style={pr.h2}>{pdfT.s3}</div>
+          <div style={pr.h3}>{pdfT.proizvodnja}</div><div style={pr.p}>{data.proizvodnja || "—"}</div>
+          <div style={pr.h3}>{pdfT.promocija}</div><div style={pr.p}>{data.promocija || "—"}</div>
+          <div style={pr.h3}>{pdfT.partneri}</div><div style={pr.p}>{data.partneri || "—"}</div>
         </div>
 
         {/* 4a. Izvori i upotreba kapitala */}
         <div style={pr.section}>
-          <div style={pr.h2}>4a. Finansijski plan: Izvori i upotreba kapitala</div>
+          <div style={pr.h2}>{pdfT.s4a}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Sredstva</th><th style={pr.th}>Iznos u KM</th></tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thSredstva}</th><th style={pr.th}>{pdfT.thIznosKM}</th></tr></thead>
             <tbody>
-              <tr><td style={{ ...pr.td, fontWeight: 700 }}>I STALNA SREDSTVA</td><td style={pr.tdR}>{fmt(totalStalna)}</td></tr>
-              {[["Zemljište", data.inv.zemljiste], ["Zgrade", data.inv.zgrade], ["Oprema", data.inv.oprema], ["Vozila", data.inv.vozila], ["Poslovni inventar", data.inv.inventar], ["Osnivačka ulaganja", data.inv.osnivacka], ["Nematerijalna sredstva", data.inv.nematerijalna]].map(([l, v]) => (
+              <tr><td style={{ ...pr.td, fontWeight: 700 }}>{pdfT.stalnaSredstva}</td><td style={pr.tdR}>{fmt(totalStalna)}</td></tr>
+              {[[pdfInv.zemljiste, data.inv.zemljiste], [pdfInv.zgrade, data.inv.zgrade], [pdfInv.oprema, data.inv.oprema], [pdfInv.vozila, data.inv.vozila], [pdfInv.inventar, data.inv.inventar], [pdfInv.osnivacka, data.inv.osnivacka], [pdfInv.nematerijalna, data.inv.nematerijalna]].map(([l, v]) => (
                 <tr key={l}><td style={pr.td}>{l}</td><td style={pr.tdR}>{fmt(v)}</td></tr>
               ))}
-              <tr><td style={{ ...pr.td, fontWeight: 700 }}>II TEKUĆA SREDSTVA</td><td style={pr.tdR}>{fmt(totalTekuca)}</td></tr>
-              {[["Zalihe", data.inv.zalihe], ["Potraživanja", data.inv.potrazivanja], ["Gotovina", data.inv.gotovina]].map(([l, v]) => (
+              <tr><td style={{ ...pr.td, fontWeight: 700 }}>{pdfT.tekucaSredstva}</td><td style={pr.tdR}>{fmt(totalTekuca)}</td></tr>
+              {[[pdfInv.zalihe, data.inv.zalihe], [pdfInv.potrazivanja, data.inv.potrazivanja], [pdfInv.gotovina, data.inv.gotovina]].map(([l, v]) => (
                 <tr key={l}><td style={pr.td}>{l}</td><td style={pr.tdR}>{fmt(v)}</td></tr>
               ))}
-              <tr style={pr.totalRow}><td style={pr.td}>UKUPNO SREDSTVA</td><td style={pr.tdR}>{fmt(totalSredstva)}</td></tr>
+              <tr style={pr.totalRow}><td style={pr.td}>{pdfT.ukupnoSredstva}</td><td style={pr.tdR}>{fmt(totalSredstva)}</td></tr>
             </tbody>
           </table>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Izvori</th><th style={pr.th}>Iznos u KM</th></tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thIzvori}</th><th style={pr.th}>{pdfT.thIznosKM}</th></tr></thead>
             <tbody>
-              <tr><td style={{ ...pr.td, fontWeight: 700 }}>I VLASTITI IZVORI</td><td style={pr.tdR}>{fmt(totalVlastiti)}</td></tr>
-              {[["Novac", data.izv.novac], ["Zemljište", data.izv.zemljiste_v], ["Građevine", data.izv.gradevine_v], ["Oprema", data.izv.oprema_v], ["Ostalo", data.izv.ostalo_v]].map(([l, v]) => (
+              <tr><td style={{ ...pr.td, fontWeight: 700 }}>{pdfT.vlastitiIzvori}</td><td style={pr.tdR}>{fmt(totalVlastiti)}</td></tr>
+              {[[pdfIzv.novac, data.izv.novac], [pdfIzv.zemljiste, data.izv.zemljiste_v], [pdfIzv.gradevine, data.izv.gradevine_v], [pdfIzv.oprema, data.izv.oprema_v], [pdfIzv.ostalo, data.izv.ostalo_v]].map(([l, v]) => (
                 <tr key={l}><td style={pr.td}>{l}</td><td style={pr.tdR}>{fmt(v)}</td></tr>
               ))}
-              <tr><td style={{ ...pr.td, fontWeight: 700 }}>II KREDITI — TUĐI IZVORI</td><td style={pr.tdR}>{fmt(totalTudi)}</td></tr>
-              {[["Dugoročni krediti", data.izv.dugorocni], ["Kratkoročni krediti", data.izv.kratkorocni], ["Ostali tuđi izvori", data.izv.ostali_tudi]].map(([l, v]) => (
+              <tr><td style={{ ...pr.td, fontWeight: 700 }}>{pdfT.kreditiTudi}</td><td style={pr.tdR}>{fmt(totalTudi)}</td></tr>
+              {[[pdfIzv.dugorocni, data.izv.dugorocni], [pdfIzv.kratkorocni, data.izv.kratkorocni], [pdfIzv.ostaliTudi, data.izv.ostali_tudi]].map(([l, v]) => (
                 <tr key={l}><td style={pr.td}>{l}</td><td style={pr.tdR}>{fmt(v)}</td></tr>
               ))}
-              <tr style={pr.totalRow}><td style={pr.td}>UKUPNO IZVORI</td><td style={pr.tdR}>{fmt(totalIzvori)}</td></tr>
+              <tr style={pr.totalRow}><td style={pr.td}>{pdfT.ukupnoIzvori}</td><td style={pr.tdR}>{fmt(totalIzvori)}</td></tr>
             </tbody>
           </table>
         </div>
 
         {/* 4b. Početni bilans stanja */}
         <div style={pr.section}>
-          <div style={pr.h2}>4b. Finansijski plan: Početni bilans stanja (na dan {fmtDate(data.bilansDatum)})</div>
+          <div style={pr.h2}>{t("pdf.s4b", { date: fmtDate(data.bilansDatum) })}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Aktiva</th><th style={pr.th}>Iznos KM</th><th style={pr.th}>Pasiva</th><th style={pr.th}>Iznos KM</th></tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thAktiva}</th><th style={pr.th}>{pdfT.thIznos}</th><th style={pr.th}>{pdfT.thPasiva}</th><th style={pr.th}>{pdfT.thIznos}</th></tr></thead>
             <tbody>
-              <tr><td style={pr.td}>Nematerijalna ulaganja</td><td style={pr.tdR}>{fmt(data.bilansAktiva.nematerijalna)}</td><td style={pr.td}>Vlastiti kapital</td><td style={pr.tdR}>{fmt(data.bilansPasiva.vlastitiKapital)}</td></tr>
-              <tr><td style={pr.td}>Zemljište</td><td style={pr.tdR}>{fmt(data.bilansAktiva.zemljiste)}</td><td style={pr.td}>Ostalo (grantovi)</td><td style={pr.tdR}>{fmt(data.bilansPasiva.ostaloKapital)}</td></tr>
-              <tr><td style={pr.td}>Objekti</td><td style={pr.tdR}>{fmt(data.bilansAktiva.objekti)}</td><td style={pr.td}>Dugoročni kredit</td><td style={pr.tdR}>{fmt(data.bilansPasiva.dugorocniKredit)}</td></tr>
-              <tr><td style={pr.td}>Oprema</td><td style={pr.tdR}>{fmt(data.bilansAktiva.oprema)}</td><td style={pr.td}>Ostale dugor. obaveze</td><td style={pr.tdR}>{fmt(data.bilansPasiva.ostaleDugorocne)}</td></tr>
-              <tr><td style={pr.td}>Ostala stalna sredstva</td><td style={pr.tdR}>{fmt(data.bilansAktiva.ostalaStalna)}</td><td style={pr.td}>Dobavljači</td><td style={pr.tdR}>{fmt(data.bilansPasiva.dobavljaci)}</td></tr>
-              <tr><td style={pr.td}>Zalihe</td><td style={pr.tdR}>{fmt(data.bilansAktiva.zalihe)}</td><td style={pr.td}>Kratkoročni krediti</td><td style={pr.tdR}>{fmt(data.bilansPasiva.kratkorocniKrediti)}</td></tr>
-              <tr><td style={pr.td}>Potraživanja</td><td style={pr.tdR}>{fmt(data.bilansAktiva.potrazivanja)}</td><td style={pr.td}>Ostale kratkor. obaveze</td><td style={pr.tdR}>{fmt(data.bilansPasiva.ostaleKratkorocne)}</td></tr>
-              <tr><td style={pr.td}>Gotovina</td><td style={pr.tdR}>{fmt(data.bilansAktiva.gotovina)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
-              <tr><td style={pr.td}>Ostala tekuća sredstva</td><td style={pr.tdR}>{fmt(data.bilansAktiva.ostalaTekuca)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
+              <tr><td style={pr.td}>{pdfBil.nematerijalnaUlaganja}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.nematerijalna)}</td><td style={pr.td}>{pdfBil.vlastitiKapital}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.vlastitiKapital)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.zemljiste}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.zemljiste)}</td><td style={pr.td}>{pdfBil.ostaloGrantovi}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.ostaloKapital)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.objekti}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.objekti)}</td><td style={pr.td}>{pdfBil.dugorocniKredit}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.dugorocniKredit)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.oprema}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.oprema)}</td><td style={pr.td}>{pdfBil.ostaleDugorocne}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.ostaleDugorocne)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.ostalaStalna}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.ostalaStalna)}</td><td style={pr.td}>{pdfBil.dobavljaci}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.dobavljaci)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.zalihe}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.zalihe)}</td><td style={pr.td}>{pdfBil.kratkorocniKrediti}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.kratkorocniKrediti)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.potrazivanja}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.potrazivanja)}</td><td style={pr.td}>{pdfBil.ostaleKratkorocne}</td><td style={pr.tdR}>{fmt(data.bilansPasiva.ostaleKratkorocne)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.gotovina}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.gotovina)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
+              <tr><td style={pr.td}>{pdfBil.ostalaTekuca}</td><td style={pr.tdR}>{fmt(data.bilansAktiva.ostalaTekuca)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
               <tr style={pr.totalRow}>
-                <td style={pr.td}>UKUPNO AKTIVA</td>
+                <td style={pr.td}>{pdfT.ukupnoAktiva}</td>
                 <td style={pr.tdR}>{fmt(num(data.bilansAktiva.nematerijalna) + num(data.bilansAktiva.zemljiste) + num(data.bilansAktiva.objekti) + num(data.bilansAktiva.oprema) + num(data.bilansAktiva.ostalaStalna) + num(data.bilansAktiva.zalihe) + num(data.bilansAktiva.potrazivanja) + num(data.bilansAktiva.gotovina) + num(data.bilansAktiva.ostalaTekuca))}</td>
-                <td style={pr.td}>UKUPNO PASIVA</td>
+                <td style={pr.td}>{pdfT.ukupnoPasiva}</td>
                 <td style={pr.tdR}>{fmt(num(data.bilansPasiva.vlastitiKapital) + num(data.bilansPasiva.ostaloKapital) + num(data.bilansPasiva.dugorocniKredit) + num(data.bilansPasiva.ostaleDugorocne) + num(data.bilansPasiva.dobavljaci) + num(data.bilansPasiva.kratkorocniKrediti) + num(data.bilansPasiva.ostaleKratkorocne))}</td>
               </tr>
             </tbody>
@@ -2361,11 +2397,11 @@ function TabVodic() {
 
         {/* 4c. Plan prodaje */}
         <div style={pr.section}>
-          <div style={pr.h2}>4c. Finansijski plan: Plan prodaje (2026–2030)</div>
+          <div style={pr.h2}>{pdfT.s4c}</div>
           <table data-pdf-table="keep" style={pr.table}>
             <thead><tr>
-              <th style={pr.th}>#</th><th style={pr.th}>Proizvod/Usluga</th><th style={pr.th}>Cijena (KM)</th>
-              <th style={pr.th}>Mj. plan 2026</th><th style={pr.th}>God. 2026</th><th style={pr.th}>2027</th><th style={pr.th}>2028</th><th style={pr.th}>2029</th><th style={pr.th}>2030</th>
+              <th style={pr.th}>{pdfT.thNum}</th><th style={pr.th}>{pdfT.thProizvod}</th><th style={pr.th}>{pdfT.thCijena}</th>
+              <th style={pr.th}>{pdfT.thMjPlan}</th><th style={pr.th}>{pdfT.thGod2026}</th><th style={pr.th}>2027</th><th style={pr.th}>2028</th><th style={pr.th}>2029</th><th style={pr.th}>2030</th>
             </tr></thead>
             <tbody>
               {data.prodaja.map((p, i) => (
@@ -2376,7 +2412,7 @@ function TabVodic() {
                 </tr>
               ))}
               <tr style={pr.totalRow}>
-                <td style={pr.td} colSpan={4}>UKUPNO</td>
+                <td style={pr.td} colSpan={4}>{pdfT.ukupno}</td>
                 {prihodi.map((v, i) => <td key={i} style={pr.tdR}>{fmt(v)}</td>)}
               </tr>
             </tbody>
@@ -2385,9 +2421,9 @@ function TabVodic() {
 
         {/* 4d. Plan troškova */}
         <div style={pr.section}>
-          <div style={pr.h2}>4d. Finansijski plan: Plan troškova (2026–2030)</div>
+          <div style={pr.h2}>{pdfT.s4d}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Struktura troškova</th>{costsLabels.map((h) => <th key={h} style={pr.th}>{h}</th>)}</tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thStruktura}</th>{costsLabels.map((h) => <th key={h} style={pr.th}>{h}</th>)}</tr></thead>
             <tbody>
               {costCategories.map((cat, idx) => {
                 if (cat.type === "section") {
@@ -2409,7 +2445,7 @@ function TabVodic() {
                 );
               })}
               <tr style={pr.totalRow}>
-                <td style={pr.td}>UKUPNO TROŠKOVI (1-5)</td>
+                <td style={pr.td}>{pdfT.ukupnoTroskovi}</td>
                 {costsLabels.map((_, ci) => {
                   let total = 0; Object.values(data.troskovi).forEach((arr) => { total += num(arr[ci]); });
                   return <td key={ci} style={pr.tdR}>{fmt(total)}</td>;
@@ -2421,9 +2457,9 @@ function TabVodic() {
 
         {/* 4e. Amortizacija */}
         <div style={pr.section}>
-          <div style={pr.h2}>4e. Finansijski plan: Obračun amortizacije</div>
+          <div style={pr.h2}>{pdfT.s4e}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Opis sredstva</th><th style={pr.th}>Nabavna vrij. (KM)</th><th style={pr.th}>Stopa (%)</th><th style={pr.th}>2026</th><th style={pr.th}>2027</th><th style={pr.th}>2028</th><th style={pr.th}>2029</th><th style={pr.th}>2030</th><th style={pr.th}>Ukupno</th></tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thOpis}</th><th style={pr.th}>{pdfT.thNabavna}</th><th style={pr.th}>{pdfT.thStopa}</th><th style={pr.th}>2026</th><th style={pr.th}>2027</th><th style={pr.th}>2028</th><th style={pr.th}>2029</th><th style={pr.th}>2030</th><th style={pr.th}>{pdfT.thUkupnoCol}</th></tr></thead>
             <tbody>
               {data.amort.map((a, i) => {
                 const am = num(a.nabavna) * (num(a.stopa) / 100);
@@ -2436,7 +2472,7 @@ function TabVodic() {
                 );
               })}
               <tr style={pr.totalRow}>
-                <td style={pr.td} colSpan={3}>UKUPNO</td>
+                <td style={pr.td} colSpan={3}>{pdfT.ukupno}</td>
                 {amortGodisnje.map((v, i) => <td key={i} style={pr.tdR}>{fmt(v)}</td>)}
                 <td style={pr.tdR}>{fmt(amortGodisnje.reduce((a, b) => a + b, 0))}</td>
               </tr>
@@ -2446,18 +2482,17 @@ function TabVodic() {
 
         {/* 4f. Otplatni plan kredita */}
         <div style={pr.section}>
-          <div style={pr.h2}>4f. Finansijski plan: Otplatni plan kredita</div>
+          <div style={pr.h2}>{pdfT.s4f}</div>
           {kreditInfo ? (
             <>
               <div style={pr.p}>
-                Iznos kredita: {fmt(data.kredit.iznos)} KM &nbsp;|&nbsp; Učešće: {fmt(data.kredit.ucesce)} KM &nbsp;|&nbsp;
-                Osnovica: {fmt(kreditInfo.osnovica)} KM &nbsp;|&nbsp; Kamata: {fmt(data.kredit.kamata)}% godišnje<br />
-                Rok otplate: {fmt(data.kredit.rok)} mj. (grace {fmt(data.kredit.grace)} mj.) &nbsp;|&nbsp; Datum prve rate: {fmtDate(data.kredit.datumPrveRate)}<br />
-                Rata u grace periodu: {fmt(kreditInfo.graceRata)} KM &nbsp;|&nbsp; Izračunata rata: {fmt(kreditInfo.rata)} KM<br />
-                Ukupna kamata: {fmt(kreditInfo.ukupnaKamata)} KM &nbsp;|&nbsp; <strong>Ukupno zaduženje: {fmt(kreditInfo.ukupnoZaduzenje)} KM</strong>
+                {t("pdf.kreditSummary", { iznos: fmt(data.kredit.iznos), ucesce: fmt(data.kredit.ucesce), osnovica: fmt(kreditInfo.osnovica), kamata: fmt(data.kredit.kamata) })}<br />
+                {t("pdf.kreditSummary2", { rok: fmt(data.kredit.rok), grace: fmt(data.kredit.grace), datum: fmtDate(data.kredit.datumPrveRate) })}<br />
+                {t("pdf.kreditSummary3", { graceRata: fmt(kreditInfo.graceRata), rata: fmt(kreditInfo.rata) })}<br />
+                {t("pdf.kreditSummary4", { kamata: fmt(kreditInfo.ukupnaKamata) })}<strong>{t("pdf.kreditSummary5", { zaduzenje: fmt(kreditInfo.ukupnoZaduzenje) })}</strong>
               </div>
               <table data-pdf-table="split" style={pr.table}>
-                <thead><tr><th style={pr.th}>BR.</th><th style={pr.th}>Datum</th><th style={pr.th}>Početno zaduženje</th><th style={pr.th}>Kamata</th><th style={pr.th}>Glavnica</th><th style={pr.th}>Ostatak</th><th style={pr.th}>Kum. kamata</th></tr></thead>
+                <thead><tr><th style={pr.th}>{pdfT.thBr}</th><th style={pr.th}>{pdfT.thDatum}</th><th style={pr.th}>{pdfT.thZaduzenje}</th><th style={pr.th}>{pdfT.thKamata}</th><th style={pr.th}>{pdfT.thGlavnica}</th><th style={pr.th}>{pdfT.thOstatak}</th><th style={pr.th}>{pdfT.thKumKamata}</th></tr></thead>
                 <tbody>
                   {kreditInfo.rows.map((r) => (
                     <tr key={r.br}>
@@ -2469,16 +2504,16 @@ function TabVodic() {
                 </tbody>
               </table>
             </>
-          ) : <div style={pr.p}>Kredit nije definisan.</div>}
+          ) : <div style={pr.p}>{pdfT.kreditNedefinisan}</div>}
         </div>
 
         {/* 4g. Normativi */}
         <div style={pr.section}>
-          <div style={pr.h2}>4g. Finansijski plan: Normativi i cijene sirovina i materijala</div>
+          <div style={pr.h2}>{pdfT.s4g}</div>
           <table data-pdf-table="keep" style={pr.table}>
             <thead><tr>
-              <th style={pr.th}>Sirovina/materijal</th><th style={pr.th}>Jed. mjere</th><th style={pr.th}>Cijena/jed. (KM)</th>
-              {data.normativiProizvodi.map((p, pi) => <th key={pi} style={pr.th}>{p || `Proizvod Br.${pi + 1}`}</th>)}
+              <th style={pr.th}>{pdfT.thSirovina}</th><th style={pr.th}>{pdfT.thJedMjere}</th><th style={pr.th}>{pdfT.thCijenaJed}</th>
+              {data.normativiProizvodi.map((p, pi) => <th key={pi} style={pr.th}>{p || t("pdf.productNo", { n: pi + 1 })}</th>)}
             </tr></thead>
             <tbody>
               {data.normativi.map((n, i) => (
@@ -2488,7 +2523,7 @@ function TabVodic() {
                 </tr>
               ))}
               <tr style={pr.totalRow}>
-                <td style={pr.td} colSpan={3}>UKUPNA CIJENA KOŠTANJA MATERIJALA PO PROIZVODU</td>
+                <td style={pr.td} colSpan={3}>{pdfT.normativiTotal}</td>
                 {data.normativiProizvodi.map((_, pi) => {
                   const total = data.normativi.reduce((sum, n) => sum + num(n.cijena) * num(n.kolicine[pi]), 0);
                   return <td key={pi} style={pr.tdR}>{fmt(total)}</td>;
@@ -2500,9 +2535,9 @@ function TabVodic() {
 
         {/* 4h. Bilans uspjeha */}
         <div style={pr.section}>
-          <div style={pr.h2}>4h. Finansijski plan: Bilans uspjeha (2026–2030)</div>
+          <div style={pr.h2}>{pdfT.s4h}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Elementi</th>{[2026, 2027, 2028, 2029, 2030].map((y) => <th key={y} style={pr.th}>{y}.</th>)}</tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thElementi}</th>{[2026, 2027, 2028, 2029, 2030].map((y) => <th key={y} style={pr.th}>{y}.</th>)}</tr></thead>
             <tbody>
               {(() => {
                 const ukPrihodi = prihodi.map((p, i) => p + num(data.ostaliPrihodi[i]));
@@ -2510,13 +2545,13 @@ function TabVodic() {
                 const porez = brutoDobit.map((d) => (d > 0 ? d * 0.1 : 0));
                 const netoDobit = brutoDobit.map((d, i) => d - porez[i]);
                 const R = [
-                  ["I. UKUPNI PRIHODI", ukPrihodi, true],
-                  ["  1. Prihodi od prodaje", prihodi, false],
-                  ["  2. Ostali prihodi", data.ostaliPrihodi.map(num), false],
-                  ["II. UKUPNI RASHODI", ukupniTroskovi, true],
-                  ["III. BRUTO DOBIT (I-II)", brutoDobit, true],
-                  ["  Porez na dobit (10%)", porez, false],
-                  ["IV. NETO DOBIT", netoDobit, true],
+                  [pdfT.rowPrihodi, ukPrihodi, true],
+                  [pdfT.rowProdaja, prihodi, false],
+                  [pdfT.rowOstali, data.ostaliPrihodi.map(num), false],
+                  [pdfT.rowRashodi, ukupniTroskovi, true],
+                  [pdfT.rowBruto, brutoDobit, true],
+                  [pdfT.rowPorez, porez, false],
+                  [pdfT.rowNeto, netoDobit, true],
                 ];
                 return R.map(([label, values, bold]) => (
                   <tr key={label} style={bold ? pr.totalRow : {}}>
@@ -2531,23 +2566,23 @@ function TabVodic() {
 
         {/* 4i. Bilans stanja na kraju godine */}
         <div style={pr.section}>
-          <div style={pr.h2}>4i. Bilans stanja na kraju poslovne godine (na dan {fmtDate(data.bilansKrajDatum)})</div>
+          <div style={pr.h2}>{t("pdf.s4i", { date: fmtDate(data.bilansKrajDatum) })}</div>
           <table data-pdf-table="keep" style={pr.table}>
-            <thead><tr><th style={pr.th}>Aktiva</th><th style={pr.th}>Iznos KM</th><th style={pr.th}>Pasiva</th><th style={pr.th}>Iznos KM</th></tr></thead>
+            <thead><tr><th style={pr.th}>{pdfT.thAktiva}</th><th style={pr.th}>{pdfT.thIznos}</th><th style={pr.th}>{pdfT.thPasiva}</th><th style={pr.th}>{pdfT.thIznos}</th></tr></thead>
             <tbody>
-              <tr><td style={pr.td}>Nematerijalna sredstva</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.nematerijalna)}</td><td style={pr.td}>Vlastiti kapital</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.vlastitiKapital)}</td></tr>
-              <tr><td style={pr.td}>Zemljište</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.zemljiste)}</td><td style={pr.td}>Akumulirana dobit</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.akumuliranaDobit)}</td></tr>
-              <tr><td style={pr.td}>Objekti</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.objekti)}</td><td style={pr.td}>Dugoročni kredit</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.dugorocniKredit)}</td></tr>
-              <tr><td style={pr.td}>Oprema</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.oprema)}</td><td style={pr.td}>Ostale dugor. obaveze</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.ostaleDugorocne)}</td></tr>
-              <tr><td style={pr.td}>Ostala stalna sredstva</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.ostalaStalna)}</td><td style={pr.td}>Dobavljači</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.dobavljaci)}</td></tr>
-              <tr><td style={pr.td}>Zalihe</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.zalihe)}</td><td style={pr.td}>Kratkoročni krediti</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.kratkorocniKrediti)}</td></tr>
-              <tr><td style={pr.td}>Potraživanja</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.potrazivanja)}</td><td style={pr.td}>Ostale kratkor. obaveze</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.ostaleKratkorocne)}</td></tr>
-              <tr><td style={pr.td}>Novac</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.novac)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
-              <tr><td style={pr.td}>Ostala tekuća sredstva</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.ostalaTekuca)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
+              <tr><td style={pr.td}>{pdfBil.nematerijalnaSredstva}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.nematerijalna)}</td><td style={pr.td}>{pdfBil.vlastitiKapital}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.vlastitiKapital)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.zemljiste}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.zemljiste)}</td><td style={pr.td}>{pdfBil.akumuliranaDobit}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.akumuliranaDobit)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.objekti}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.objekti)}</td><td style={pr.td}>{pdfBil.dugorocniKredit}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.dugorocniKredit)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.oprema}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.oprema)}</td><td style={pr.td}>{pdfBil.ostaleDugorocne}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.ostaleDugorocne)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.ostalaStalna}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.ostalaStalna)}</td><td style={pr.td}>{pdfBil.dobavljaci}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.dobavljaci)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.zalihe}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.zalihe)}</td><td style={pr.td}>{pdfBil.kratkorocniKrediti}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.kratkorocniKrediti)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.potrazivanja}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.potrazivanja)}</td><td style={pr.td}>{pdfBil.ostaleKratkorocne}</td><td style={pr.tdR}>{fmt(data.bilansKrajPasiva.ostaleKratkorocne)}</td></tr>
+              <tr><td style={pr.td}>{pdfBil.novac}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.novac)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
+              <tr><td style={pr.td}>{pdfBil.ostalaTekuca}</td><td style={pr.tdR}>{fmt(data.bilansKrajAktiva.ostalaTekuca)}</td><td style={pr.td}></td><td style={pr.tdR}></td></tr>
               <tr style={pr.totalRow}>
-                <td style={pr.td}>UKUPNO AKTIVA</td>
+                <td style={pr.td}>{pdfT.ukupnoAktiva}</td>
                 <td style={pr.tdR}>{fmt(num(data.bilansKrajAktiva.nematerijalna) + num(data.bilansKrajAktiva.zemljiste) + num(data.bilansKrajAktiva.objekti) + num(data.bilansKrajAktiva.oprema) + num(data.bilansKrajAktiva.ostalaStalna) + num(data.bilansKrajAktiva.zalihe) + num(data.bilansKrajAktiva.potrazivanja) + num(data.bilansKrajAktiva.novac) + num(data.bilansKrajAktiva.ostalaTekuca))}</td>
-                <td style={pr.td}>UKUPNO PASIVA</td>
+                <td style={pr.td}>{pdfT.ukupnoPasiva}</td>
                 <td style={pr.tdR}>{fmt(num(data.bilansKrajPasiva.vlastitiKapital) + num(data.bilansKrajPasiva.akumuliranaDobit) + num(data.bilansKrajPasiva.dugorocniKredit) + num(data.bilansKrajPasiva.ostaleDugorocne) + num(data.bilansKrajPasiva.dobavljaci) + num(data.bilansKrajPasiva.kratkorocniKrediti) + num(data.bilansKrajPasiva.ostaleKratkorocne))}</td>
               </tr>
             </tbody>
@@ -2556,7 +2591,7 @@ function TabVodic() {
 
         {/* Sažetak */}
         <div style={pr.section}>
-          <div style={pr.h2}>Sažetak finansijskog plana</div>
+          <div style={pr.h2}>{pdfT.sazetak}</div>
           <div style={pr.p}>{data.sazetak || "—"}</div>
         </div>
       </div>
@@ -2568,7 +2603,7 @@ function TabVodic() {
     if (!node || pdfExporting) return;
 
     const source = node.firstElementChild || node;
-    const safeTitle = (data.naziv || "Biznis plan").replace(/[<>"/\\|*?:]/g, "").trim() || "Biznis plan";
+    const safeTitle = (data.naziv || t("pdf.fileFallback")).replace(/[<>"/\\|*?:]/g, "").trim() || t("pdf.fileFallback");
     const fileName = safeTitle.replace(/[^a-zA-Z0-9À-ž-_ ]/g, "").trim().replace(/\s+/g, "_") || "biznis-plan";
 
     setPdfExporting(true);
@@ -2768,7 +2803,7 @@ function TabVodic() {
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(9);
         pdf.setTextColor(200, 16, 46);
-        const headerTitle = `BizPlan — ${safeTitle}`;
+        const headerTitle = t("pdf.headerTitle", { name: safeTitle });
         pdf.text(headerTitle.length > 70 ? `${headerTitle.slice(0, 67)}...` : headerTitle, sideMargin, 7.5);
 
         // Footer band (~1 cm)
@@ -2780,14 +2815,14 @@ function TabVodic() {
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(8);
         pdf.setTextColor(107, 107, 107);
-        pdf.text("Univerzitet FINRA — BizPlan Asistent", sideMargin, pageH - 4.5);
+        pdf.text(t("pdf.footer"), sideMargin, pageH - 4.5);
         pdf.text(`${page + 1} / ${totalPages}`, pageW - sideMargin, pageH - 4.5, { align: "right" });
       }
 
       pdf.save(`${fileName}.pdf`);
     } catch (err) {
       console.error("PDF export failed:", err);
-      alert("Greška pri generisanju PDF-a. Pokušajte ponovo.");
+      alert(t("vodic.sazetak.pdfError"));
     } finally {
       if (clone.parentNode) document.body.removeChild(clone);
       setPdfExporting(false);
@@ -2833,9 +2868,9 @@ function TabVodic() {
             padding: "8px 16px", borderRadius: 999, border: `1px dashed ${C.textMuted}`,
             background: "transparent", color: C.textMuted, fontSize: 12, fontWeight: 600, cursor: "pointer",
           }}
-          title="Testno dugme — popunjava trenutni korak nasumičnim vrijednostima"
+          title={t("vodic.nav.randomFillTitle")}
         >
-          🎲 Automatski popuni random vrijednostima (test)
+          {t("vodic.nav.randomFill")}
         </button>
       </div>
 
@@ -2848,14 +2883,14 @@ function TabVodic() {
           disabled={step === 0}
           style={{ ...btnPrimary, background: step === 0 ? C.border : C.text, opacity: step === 0 ? 0.5 : 1 }}
         >
-          ← Nazad
+          {t("vodic.nav.back")}
         </button>
         <button
           onClick={() => step < STEPS.length - 1 && setStep(step + 1)}
           disabled={step === STEPS.length - 1}
           style={{ ...btnPrimary, opacity: step === STEPS.length - 1 ? 0.5 : 1 }}
         >
-          Dalje →
+          {t("vodic.nav.next")}
         </button>
       </div>
     </div>
@@ -2866,17 +2901,16 @@ function TabVodic() {
 // MAIN APP
 // ═══════════════════════════════════════════
 
-const TABS = [
-  { id: "kreatori", label: "O kreatorima" },
-  { id: "info", label: "Informacije" },
-  { id: "zasto", label: "Zašto biznis plan?" },
-  { id: "literatura", label: "Literatura" },
-  { id: "primjeri", label: "Primjeri" },
-  { id: "vodic", label: "Vodič & Kreator" },
-];
+const TAB_IDS = ["kreatori", "info", "zasto", "literatura", "primjeri", "vodic"];
 
-export default function App() {
+function AppInner() {
+  const { t } = useLang();
   const [tab, setTab] = useState("vodic");
+
+  const TABS = useMemo(
+    () => TAB_IDS.map((id) => ({ id, label: t(`tabs.${id}`) })),
+    [t]
+  );
 
   const renderTab = () => {
     switch (tab) {
@@ -2901,26 +2935,29 @@ export default function App() {
         }}
       >
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 6 }}>
-            <div
-              style={{
-                width: 42,
-                height: 42,
-                borderRadius: 10,
-                background: "rgba(255,255,255,.2)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 22,
-                fontWeight: 900,
-              }}
-            >
-              BP
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 6 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 10,
+                  background: "rgba(255,255,255,.2)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 22,
+                  fontWeight: 900,
+                }}
+              >
+                BP
+              </div>
+              <div>
+                <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: -0.5 }}>{t("header.brand")}</div>
+                <div style={{ fontSize: 13, opacity: 0.8 }}>{t("header.subtitle")}</div>
+              </div>
             </div>
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 900, letterSpacing: -0.5 }}>BizPlan Asistent</div>
-              <div style={{ fontSize: 13, opacity: 0.8 }}>Univerzitet FINRA — Vodič za razvoj biznis planova</div>
-            </div>
+            <LangSwitch />
           </div>
         </div>
       </div>
@@ -2928,9 +2965,9 @@ export default function App() {
       {/* Tab bar */}
       <div style={{ background: C.white, borderBottom: `1px solid ${C.border}`, position: "sticky", top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", gap: 4, padding: "10px 24px", overflowX: "auto" }}>
-          {TABS.map((t) => (
-            <button key={t.id} onClick={() => setTab(t.id)} style={pill(tab === t.id)}>
-              {t.label}
+          {TABS.map((tabItem) => (
+            <button key={tabItem.id} onClick={() => setTab(tabItem.id)} style={pill(tab === tabItem.id)}>
+              {tabItem.label}
             </button>
           ))}
         </div>
@@ -2943,8 +2980,16 @@ export default function App() {
 
       {/* Footer */}
       <div style={{ background: C.text, color: "rgba(255,255,255,.5)", textAlign: "center", padding: "20px", fontSize: 12, marginTop: "auto" }}>
-        © 2026 Univerzitet FINRA — Savremeni Menadžment i Digitalno Poslovanje
+        {t("footer.text")}
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppInner />
+    </LanguageProvider>
   );
 }
