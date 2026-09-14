@@ -91,7 +91,7 @@ const label = {
   marginBottom: 6,
 };
 
-// ─── Language switcher (header top-right) ───
+// Language switcher: BOS / ENG (persists via i18n localStorage)
 function LangSwitch() {
   const { lang, setLang, t } = useLang();
   const langPill = (active) => ({
