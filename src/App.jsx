@@ -588,7 +588,7 @@ function DateDMY({ value, onChange }) {
 }
 
 function TabVodic() {
-  const { t, lang } = useLang();
+  const { t, lang, currency } = useLang();
   const [step, setStep] = useState(0);
   const [data, setData] = useState(initData);
   const [errors, setErrors] = useState([]);
@@ -1120,7 +1120,7 @@ function TabVodic() {
                     if (r.section) return (
                       <tr key={i}>
                         <td style={tblSection}>{r.label}</td>
-                        <td style={tblSection}>{r.value.toLocaleString()} KM</td>
+                        <td style={tblSection}>{r.value.toLocaleString()} {currency}</td>
                         <td style={tblSection}></td>
                       </tr>
                     );
@@ -1138,7 +1138,7 @@ function TabVodic() {
                   })}
                   <tr>
                     <td style={tblTotal}>{t("vodic.investicije.totalSredstva")}</td>
-                    <td style={tblTotal}>{totalSredstva.toLocaleString()} KM</td>
+                    <td style={tblTotal}>{totalSredstva.toLocaleString()} {currency}</td>
                     <td style={tblTotal}></td>
                   </tr>
                 </tbody>
@@ -1162,7 +1162,7 @@ function TabVodic() {
                     if (r.section) return (
                       <tr key={i}>
                         <td style={tblSection}>{r.label}</td>
-                        <td style={tblSection}>{r.value.toLocaleString()} KM</td>
+                        <td style={tblSection}>{r.value.toLocaleString()} {currency}</td>
                       </tr>
                     );
                     if (r.section2) return (
@@ -1179,7 +1179,7 @@ function TabVodic() {
                   })}
                   <tr>
                     <td style={tblTotal}>{t("vodic.investicije.totalIzvori")}</td>
-                    <td style={tblTotal}>{totalIzvori.toLocaleString()} KM</td>
+                    <td style={tblTotal}>{totalIzvori.toLocaleString()} {currency}</td>
                   </tr>
                 </tbody>
               </table>
@@ -1201,25 +1201,25 @@ function TabVodic() {
                   <tr><td colSpan={2} style={tblSection}>{usk.ulaganja}</td></tr>
                   <tr>
                     <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.stalna}</td>
-                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalStalna.toLocaleString()} KM</td>
+                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalStalna.toLocaleString()} {currency}</td>
                   </tr>
                   <tr>
                     <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.tekuca}</td>
-                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalTekuca.toLocaleString()} KM</td>
+                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalTekuca.toLocaleString()} {currency}</td>
                   </tr>
                   <tr><td colSpan={2} style={tblSection}>{usk.izvori}</td></tr>
                   <tr>
                     <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.vlastita}</td>
-                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalVlastiti.toLocaleString()} KM</td>
+                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalVlastiti.toLocaleString()} {currency}</td>
                   </tr>
                   <tr>
                     <td style={{ ...tblCell, paddingLeft: 24 }}>{usk.tudja}</td>
-                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalTudi.toLocaleString()} KM</td>
+                    <td style={{ ...tblCell, fontWeight: 600 }}>{totalTudi.toLocaleString()} {currency}</td>
                   </tr>
                   <tr>
                     <td style={{ ...tblTotal, background: Math.abs(totalSredstva - totalIzvori) < 0.01 ? C.green : C.red }}>{usk.razlika}</td>
                     <td style={{ ...tblTotal, background: Math.abs(totalSredstva - totalIzvori) < 0.01 ? C.green : C.red }}>
-                      {(totalSredstva - totalIzvori).toLocaleString()} KM
+                      {(totalSredstva - totalIzvori).toLocaleString()} {currency}
                     </td>
                   </tr>
                 </tbody>
@@ -1314,9 +1314,9 @@ function TabVodic() {
                         return (
                           <tr key={i}>
                             <td colSpan={2} style={bs}>{r.aLabel}</td>
-                            <td style={{ ...bs, borderRight: divider }}>{r.aValue.toLocaleString()} KM</td>
+                            <td style={{ ...bs, borderRight: divider }}>{r.aValue.toLocaleString()} {currency}</td>
                             <td colSpan={2} style={bs}>{r.pLabel}</td>
-                            <td style={bs}>{r.pValue.toLocaleString()} KM</td>
+                            <td style={bs}>{r.pValue.toLocaleString()} {currency}</td>
                           </tr>
                         );
                       }
@@ -1329,7 +1329,7 @@ function TabVodic() {
                               {r.aKey && <TableInput value={ba[r.aKey]} onChange={(v) => set(`bilansAktiva.${r.aKey}`, v)} width="100%" />}
                             </td>
                             <td colSpan={2} style={bs}>{r.pLabel}</td>
-                            <td style={bs}>{r.pValue.toLocaleString()} KM</td>
+                            <td style={bs}>{r.pValue.toLocaleString()} {currency}</td>
                           </tr>
                         );
                       }
@@ -1368,9 +1368,9 @@ function TabVodic() {
                     {/* TOTALS */}
                     <tr>
                       <td colSpan={2} style={bt}>{bil.totalAktiva}</td>
-                      <td style={{ ...bt, borderRight: divider }}>{ukAktiva.toLocaleString()} KM</td>
+                      <td style={{ ...bt, borderRight: divider }}>{ukAktiva.toLocaleString()} {currency}</td>
                       <td colSpan={2} style={bt}>{bil.totalPasiva}</td>
-                      <td style={bt}>{ukPasiva.toLocaleString()} KM</td>
+                      <td style={bt}>{ukPasiva.toLocaleString()} {currency}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1466,9 +1466,9 @@ function TabVodic() {
                         return (
                           <tr key={i}>
                             <td colSpan={2} style={bs}>{r.aLabel}</td>
-                            <td style={{ ...bs, borderRight: divider }}>{r.aValue.toLocaleString()} KM</td>
+                            <td style={{ ...bs, borderRight: divider }}>{r.aValue.toLocaleString()} {currency}</td>
                             <td colSpan={2} style={bs}>{r.pLabel}</td>
-                            <td style={bs}>{r.pValue.toLocaleString()} KM</td>
+                            <td style={bs}>{r.pValue.toLocaleString()} {currency}</td>
                           </tr>
                         );
                       }
@@ -1481,7 +1481,7 @@ function TabVodic() {
                               {r.aKey && <TableInput value={ba[r.aKey]} onChange={(v) => set(`bilansKrajAktiva.${r.aKey}`, v)} width="100%" />}
                             </td>
                             <td colSpan={2} style={bs}>{r.pLabel}</td>
-                            <td style={bs}>{r.pValue.toLocaleString()} KM</td>
+                            <td style={bs}>{r.pValue.toLocaleString()} {currency}</td>
                           </tr>
                         );
                       }
@@ -1520,9 +1520,9 @@ function TabVodic() {
                     {/* TOTALS */}
                     <tr>
                       <td colSpan={2} style={bt}>{bil.totalAktiva}</td>
-                      <td style={{ ...bt, borderRight: divider }}>{ukAktiva.toLocaleString()} KM</td>
+                      <td style={{ ...bt, borderRight: divider }}>{ukAktiva.toLocaleString()} {currency}</td>
                       <td colSpan={2} style={bt}>{bil.totalPasiva}</td>
-                      <td style={bt}>{ukPasiva.toLocaleString()} KM</td>
+                      <td style={bt}>{ukPasiva.toLocaleString()} {currency}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1607,10 +1607,10 @@ function TabVodic() {
                   <tr style={{ background: C.redLight, fontWeight: 700 }}>
                     <td colSpan={3} style={{ padding: 10 }}>{t("vodic.common.total")}</td>
                     <td style={{ padding: 10 }}>
-                      {data.prodaja.reduce((sum, p) => sum + num(p.mj2026), 0).toLocaleString()} KM
+                      {data.prodaja.reduce((sum, p) => sum + num(p.mj2026), 0).toLocaleString()} {currency}
                     </td>
                     {prihodi.map((p, i) => (
-                      <td key={i} style={{ padding: 10 }}>{p.toLocaleString()} KM</td>
+                      <td key={i} style={{ padding: 10 }}>{p.toLocaleString()} {currency}</td>
                     ))}
                     <td></td>
                   </tr>
@@ -1669,7 +1669,7 @@ function TabVodic() {
                             cat.keys.forEach((k) => { sub += num(data.troskovi[k][ci]); });
                             return (
                               <td key={ci} style={{ padding: "10px 8px", textAlign: "left", fontWeight: 700, fontSize: 13, color: C.redDark }}>
-                                {sub > 0 ? sub.toLocaleString() + " KM" : ""}
+                                {sub > 0 ? sub.toLocaleString() + " " + currency : ""}
                               </td>
                             );
                           })}
@@ -1697,7 +1697,7 @@ function TabVodic() {
                     {costsLabels.map((_, ci) => {
                       let total = 0;
                       Object.values(data.troskovi).forEach((arr) => { total += num(arr[ci]); });
-                      return <td key={ci} style={{ padding: 10, textAlign: "right", fontWeight: 800, color: C.white, fontSize: 14 }}>{total.toLocaleString()} KM</td>;
+                      return <td key={ci} style={{ padding: 10, textAlign: "right", fontWeight: 800, color: C.white, fontSize: 14 }}>{total.toLocaleString()} {currency}</td>;
                     })}
                   </tr>
                 </tbody>
@@ -1874,19 +1874,19 @@ function TabVodic() {
                   <div style={{ padding: 20 }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 14 }}>
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.osnovica}</strong></div>
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.osnovica)} KM</div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.osnovica)} {currency}</div>
 
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.graceKamata}</strong></div>
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.graceKamata)} KM</div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.graceKamata)} {currency}</div>
 
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.kamataUOtplati}</strong></div>
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.kamatuUOtplati)} KM</div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.kamatuUOtplati)} {currency}</div>
 
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.ukupnaKamata}</strong></div>
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.ukupnaKamata)} KM</div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.ukupnaKamata)} {currency}</div>
 
                       <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}` }}><strong>{kr.ukupnoZaduzenje}</strong></div>
-                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.ukupnoZaduzenje)} KM</div>
+                      <div style={{ padding: "8px 0", borderBottom: `1px solid ${C.borderLight}`, textAlign: "right" }}>{fmt(kreditInfo.ukupnoZaduzenje)} {currency}</div>
                     </div>
                   </div>
                 </div>
@@ -1899,11 +1899,11 @@ function TabVodic() {
                   <div style={{ padding: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, fontSize: 14 }}>
                     <div style={{ padding: 16, background: C.bg, borderRadius: 10, textAlign: "center" }}>
                       <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{kr.graceRata}</div>
-                      <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>{fmt(kreditInfo.graceRata)} KM</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>{fmt(kreditInfo.graceRata)} {currency}</div>
                     </div>
                     <div style={{ padding: 16, background: C.bg, borderRadius: 10, textAlign: "center" }}>
                       <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{kr.izracunataRata}</div>
-                      <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>{fmt(kreditInfo.rata)} KM</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: C.red }}>{fmt(kreditInfo.rata)} {currency}</div>
                     </div>
                   </div>
                 </div>
@@ -2060,7 +2060,7 @@ function TabVodic() {
                     <td colSpan={3} style={{ padding: 10 }}>{nm.totalRow}</td>
                     {proizvodi.map((_, pi) => {
                       const total = data.normativi.reduce((sum, n) => sum + num(n.cijena) * num(n.kolicine[pi]), 0);
-                      return <td key={pi} style={{ padding: 10, textAlign: "center" }}>{total.toLocaleString(undefined, { maximumFractionDigits: 2 })} KM</td>;
+                      return <td key={pi} style={{ padding: 10, textAlign: "center" }}>{total.toLocaleString(undefined, { maximumFractionDigits: 2 })} {currency}</td>;
                     })}
                     <td></td>
                   </tr>
@@ -2130,7 +2130,7 @@ function TabVodic() {
                           <td style={{ padding: 10, fontWeight: bold ? 700 : 400 }}>{label}</td>
                           {values.map((v, i) => (
                             <td key={i} style={{ padding: 10, textAlign: "right", fontWeight: bold ? 700 : 400, color: v < 0 ? C.red : "inherit" }}>
-                              {v.toLocaleString(undefined, { maximumFractionDigits: 0 })} KM
+                              {v.toLocaleString(undefined, { maximumFractionDigits: 0 })} {currency}
                             </td>
                           ))}
                         </tr>
@@ -2219,12 +2219,12 @@ function TabVodic() {
             {/* Quick stats */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 16, marginTop: 12 }}>
               {[
-                [stats.ulaganja, `${totalSredstva.toLocaleString()} KM`],
-                [stats.vlastiti, `${totalVlastiti.toLocaleString()} KM`],
-                [stats.tudji, `${totalTudi.toLocaleString()} KM`],
-                [stats.prihodi, `${prihodi[0].toLocaleString()} KM`],
-                [stats.troskovi, `${ukupniTroskovi[0].toLocaleString()} KM`],
-                [stats.neto, `${((prihodi[0] + num(data.ostaliPrihodi[0]) - ukupniTroskovi[0]) * 0.9).toLocaleString(undefined, { maximumFractionDigits: 0 })} KM`],
+                [stats.ulaganja, `${totalSredstva.toLocaleString()} ${currency}`],
+                [stats.vlastiti, `${totalVlastiti.toLocaleString()} ${currency}`],
+                [stats.tudji, `${totalTudi.toLocaleString()} ${currency}`],
+                [stats.prihodi, `${prihodi[0].toLocaleString()} ${currency}`],
+                [stats.troskovi, `${ukupniTroskovi[0].toLocaleString()} ${currency}`],
+                [stats.neto, `${((prihodi[0] + num(data.ostaliPrihodi[0]) - ukupniTroskovi[0]) * 0.9).toLocaleString(undefined, { maximumFractionDigits: 0 })} ${currency}`],
               ].map(([l, v]) => (
                 <div key={l} style={{ ...card, padding: 18, textAlign: "center", marginBottom: 0 }}>
                   <div style={{ fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{l}</div>

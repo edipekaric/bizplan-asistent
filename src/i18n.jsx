@@ -14,12 +14,15 @@ function interpolate(str, vars) {
 function translate(tree, key, vars) {
   const val = getNested(tree, key);
   if (val == null) return key;
-  if (typeof val === "string") return interpolate(val, vars);
+  if (typeof val === "string") {
+    return interpolate(val, { currency: tree.currency || "KM", ...vars });
+  }
   return val;
 }
 
 const translations = {
   "bs": {
+    "currency": "KM",
     "lang": {
       "bs": "Bosanski",
       "en": "English",
@@ -221,7 +224,7 @@ const translations = {
         "swot": "SWOT analiza nije potpuna — popunite sva 4 polja.",
         "sredstvaNula": "Ukupna sredstva (investicije) su 0 — unesite vrijednosti.",
         "izvoriNula": "Ukupni izvori sredstava su 0.",
-        "neuravnotezeno": "Sredstva ({sredstva} KM) ≠ Izvori ({izvori} KM). Razlika: {diff} KM.",
+        "neuravnotezeno": "Sredstva ({sredstva} {currency}) ≠ Izvori ({izvori} {currency}). Razlika: {diff} {currency}.",
         "prodajaPrazna": "Plan prodaje je prazan — unesite barem jedan proizvod/uslugu.",
         "troskoviPrazni": "Plan troškova je prazan.",
         "troskoviPreveliki": "Troškovi u {year}. su više od 3x veći od prihoda — provjerite podatke.",
@@ -305,7 +308,7 @@ const translations = {
         "tableB": "B) Izvori sredstava",
         "tableC": "C) Usklađivanje ulaganja i izvora sredstava",
         "thSredstva": "Sredstva",
-        "thIznos": "Iznos u KM",
+        "thIznos": "Iznos u {currency}",
         "thNapomena": "Napomena",
         "thIzvori": "Izvori",
         "thElementi": "Elementi",
@@ -314,7 +317,7 @@ const translations = {
         "note": "* Sredstva moraju biti jednaka izvorima sredstava!",
         "badgeEmpty": "Unesite sredstva i izvore",
         "badgeOk": "Sredstva = Izvori ✓ Bilans je uravnotežen",
-        "badgeDiff": "Razlika: {diff} KM — sredstva moraju biti jednaka izvorima!",
+        "badgeDiff": "Razlika: {diff} {currency} — sredstva moraju biti jednaka izvorima!",
         "inv": {
           "stalna": "I STALNA SREDSTVA",
           "zemljiste": "1. Zemljište",
@@ -366,12 +369,12 @@ const translations = {
         "thRb": "R/b",
         "thAktiva": "Aktiva",
         "thPasiva": "Pasiva",
-        "thIznos": "Iznos u KM",
+        "thIznos": "Iznos u {currency}",
         "totalAktiva": "UKUPNO AKTIVA (A+B):",
         "totalPasiva": "UKUPNO PASIVA (A+B+C):",
         "badgeEmpty": "Unesite vrijednosti u bilans stanja",
         "badgeOk": "Bilans je uravnotežen (Aktiva = Pasiva) ✓",
-        "badgeDiff": "Bilans NIJE uravnotežen! Aktiva ({aktiva}) ≠ Pasiva ({pasiva}). Razlika: {diff} KM",
+        "badgeDiff": "Bilans NIJE uravnotežen! Aktiva ({aktiva}) ≠ Pasiva ({pasiva}). Razlika: {diff} {currency}",
         "sections": {
           "stalna": "A. STALNA SREDSTVA (1-3)",
           "kapital": "A. KAPITAL (1-2)",
@@ -410,7 +413,7 @@ const translations = {
         "sub": "Unesite planirane prihode po proizvodima/uslugama. Mjesečni plan × 12 bi trebao biti ≈ godišnji plan za 2026.",
         "thNum": "#",
         "thProizvod": "Proizvod/Usluga",
-        "thCijena": "Cijena po proizvodu (KM)",
+        "thCijena": "Cijena po proizvodu ({currency})",
         "thMjesecni": "Mjesečni plan 2026",
         "thGodisnji": "Godišnji plan {year}",
         "phNaziv": "Naziv",
@@ -423,7 +426,7 @@ const translations = {
         "colMonthly": "Mjesečni nivo za 2026.",
         "colAnnual": "Godišnji nivo za 2026.",
         "totalRow": "UKUPNO TROŠKOVI (1-5)",
-        "badge": "Mj. ukupno ×12 = {expected} KM, God. ukupno = {actual} KM",
+        "badge": "Mj. ukupno ×12 = {expected} {currency}, God. ukupno = {actual} {currency}",
         "cat": {
           "sectionMaterijalni": "1. Materijalni troškovi",
           "sirovine": "Troškovi sirovina i repromaterijala",
@@ -445,7 +448,7 @@ const translations = {
         "title": "4e. Finansijski plan: Obračun Amortizacije",
         "sub": "Unesite stalna sredstva, nabavnu vrijednost i stopu amortizacije. Amortizacija se računa automatski (linearna metoda).",
         "thOpis": "Opis sredstva",
-        "thNabavna": "Nabavna vrij. (KM)",
+        "thNabavna": "Nabavna vrij. ({currency})",
         "thStopa": "Stopa (%)",
         "thUkupno": "UKUPNO",
         "phOpis": "npr. Računar",
@@ -453,7 +456,7 @@ const translations = {
         "legalTitle": "Zakonom propisane stope amortizacije — Član 19.",
         "legal1": "(1) Kod utvrđivanja porezne osnovice priznaje se obračunata amortizacija primjenom proporcionalne metode amortizacije na dugotrajnu imovinu na način propisan ovim člankom.",
         "legal2": "(2) Porezno priznate stope amortizacije dugotrajne imovine iznose:",
-        "legal4": "(4) Ukoliko je nabavna cijena imovine manja od 1.000,00 KM, njezina nabavna vrijednost može se u cijelosti otpisati u godini u kojoj je ta imovina nabavljena.",
+        "legal4": "(4) Ukoliko je nabavna cijena imovine manja od 1.000,00 {currency}, njezina nabavna vrijednost može se u cijelosti otpisati u godini u kojoj je ta imovina nabavljena.",
         "legal5": "(5) Dugotrajna imovina koja je u cijelosti otpisana, ali se i dalje vodi u evidencijama do momenta otuđenja ili uništavanja, ne može se ponovno procjenjivati i na nju obračunavati amortizacija i priznati u porezne svrhe.",
         "legalRows": [
           [
@@ -501,13 +504,13 @@ const translations = {
       "kredit": {
         "title": "4f. Finansijski plan: Otplatni plan kredita",
         "initTitle": "Inicijalni podaci o pozajmici",
-        "iznosLbl": "Iznos kredita (KM)",
+        "iznosLbl": "Iznos kredita ({currency})",
         "iznosTip": "Ukupan iznos pozajmice.",
         "kamataLbl": "Kamata (% godišnje)",
         "kamataTip": "Godišnja kamatna stopa, npr. 3.49%.",
         "rokLbl": "Rok otplate (mjeseci)",
         "rokTip": "Ukupan rok trajanja kredita u mjesecima, uključujući grace period.",
-        "ucesceLbl": "Učešće (KM)",
+        "ucesceLbl": "Učešće ({currency})",
         "ucesceTip": "Iznos vlastitog učešća (umanjuje osnovicu kredita).",
         "graceLbl": "Grace period (mjeseci)",
         "graceTip": "Period u kojem se plaća samo kamata, bez glavnice.",
@@ -536,7 +539,7 @@ const translations = {
         "sub": "Unesite direktne sirovine i materijal potrebne za proizvodnju, jedinicu mjere, cijenu koštanja po jedinici mjere, nazive proizvoda, te potrebnu količinu (normativ) za svaki proizvod.",
         "thSirovine": "Direktne sirovine i materijal",
         "thJedMjere": "Jed. mjere",
-        "thCijena": "Cijena koštanja po jedinici mjere (KM)",
+        "thCijena": "Cijena koštanja po jedinici mjere ({currency})",
         "productNo": "Proizvod Br.{n}",
         "phProductName": "Naziv proizvoda",
         "deleteProduct": "Obriši proizvod",
@@ -560,7 +563,7 @@ const translations = {
         "rowNeto": "IV. NETO DOBIT",
         "profitable": "Profitabilno",
         "loss": "Gubitak",
-        "badge": "{year}: {status} ({amount} KM)"
+        "badge": "{year}: {status} ({amount} {currency})"
       },
       "sazetak": {
         "title": "Sažetak & Završna provjera",
@@ -672,7 +675,7 @@ const translations = {
       "promocija": "Promocija & Kanali distribucije",
       "partneri": "Ključni partneri",
       "thSredstva": "Sredstva",
-      "thIznosKM": "Iznos u KM",
+      "thIznosKM": "Iznos u {currency}",
       "thIzvori": "Izvori",
       "stalnaSredstva": "I STALNA SREDSTVA",
       "tekucaSredstva": "II TEKUĆA SREDSTVA",
@@ -682,27 +685,27 @@ const translations = {
       "ukupnoIzvori": "UKUPNO IZVORI",
       "thAktiva": "Aktiva",
       "thPasiva": "Pasiva",
-      "thIznos": "Iznos KM",
+      "thIznos": "Iznos {currency}",
       "ukupnoAktiva": "UKUPNO AKTIVA",
       "ukupnoPasiva": "UKUPNO PASIVA",
       "thNum": "#",
       "thProizvod": "Proizvod/Usluga",
-      "thCijena": "Cijena (KM)",
+      "thCijena": "Cijena ({currency})",
       "thMjPlan": "Mj. plan 2026",
       "thGod2026": "God. 2026",
       "ukupno": "UKUPNO",
       "thStruktura": "Struktura troškova",
       "ukupnoTroskovi": "UKUPNO TROŠKOVI (1-5)",
       "thOpis": "Opis sredstva",
-      "thNabavna": "Nabavna vrij. (KM)",
+      "thNabavna": "Nabavna vrij. ({currency})",
       "thStopa": "Stopa (%)",
       "thUkupnoCol": "Ukupno",
       "kreditNedefinisan": "Kredit nije definisan.",
-      "kreditSummary": "Iznos kredita: {iznos} KM | Učešće: {ucesce} KM | Osnovica: {osnovica} KM | Kamata: {kamata}% godišnje",
+      "kreditSummary": "Iznos kredita: {iznos} {currency} | Učešće: {ucesce} {currency} | Osnovica: {osnovica} {currency} | Kamata: {kamata}% godišnje",
       "kreditSummary2": "Rok otplate: {rok} mj. (grace {grace} mj.) | Datum prve rate: {datum}",
-      "kreditSummary3": "Rata u grace periodu: {graceRata} KM | Izračunata rata: {rata} KM",
-      "kreditSummary4": "Ukupna kamata: {kamata} KM | ",
-      "kreditSummary5": "Ukupno zaduženje: {zaduzenje} KM",
+      "kreditSummary3": "Rata u grace periodu: {graceRata} {currency} | Izračunata rata: {rata} {currency}",
+      "kreditSummary4": "Ukupna kamata: {kamata} {currency} | ",
+      "kreditSummary5": "Ukupno zaduženje: {zaduzenje} {currency}",
       "thBr": "BR.",
       "thDatum": "Datum",
       "thZaduzenje": "Početno zaduženje",
@@ -712,7 +715,7 @@ const translations = {
       "thKumKamata": "Kum. kamata",
       "thSirovina": "Sirovina/materijal",
       "thJedMjere": "Jed. mjere",
-      "thCijenaJed": "Cijena/jed. (KM)",
+      "thCijenaJed": "Cijena/jed. ({currency})",
       "productNo": "Proizvod Br.{n}",
       "normativiTotal": "UKUPNA CIJENA KOŠTANJA MATERIJALA PO PROIZVODU",
       "thElementi": "Elementi",
@@ -769,6 +772,7 @@ const translations = {
     }
   },
   "en": {
+    "currency": "EUR",
     "lang": {
       "bs": "Bosnian",
       "en": "English",
@@ -970,7 +974,7 @@ const translations = {
         "swot": "SWOT analysis is incomplete — fill in all 4 fields.",
         "sredstvaNula": "Total assets (investments) are 0 — enter values.",
         "izvoriNula": "Total funding sources are 0.",
-        "neuravnotezeno": "Assets ({sredstva} KM) ≠ Sources ({izvori} KM). Difference: {diff} KM.",
+        "neuravnotezeno": "Assets ({sredstva} {currency}) ≠ Sources ({izvori} {currency}). Difference: {diff} {currency}.",
         "prodajaPrazna": "Sales plan is empty — enter at least one product/service.",
         "troskoviPrazni": "Cost plan is empty.",
         "troskoviPreveliki": "Costs in {year} are more than 3× revenue — check your data.",
@@ -1054,7 +1058,7 @@ const translations = {
         "tableB": "B) Sources of funds",
         "tableC": "C) Alignment of investments and funding sources",
         "thSredstva": "Assets",
-        "thIznos": "Amount in KM",
+        "thIznos": "Amount in {currency}",
         "thNapomena": "Note",
         "thIzvori": "Sources",
         "thElementi": "Items",
@@ -1063,7 +1067,7 @@ const translations = {
         "note": "* Assets must equal funding sources!",
         "badgeEmpty": "Enter assets and sources",
         "badgeOk": "Assets = Sources ✓ Balance is aligned",
-        "badgeDiff": "Difference: {diff} KM — assets must equal sources!",
+        "badgeDiff": "Difference: {diff} {currency} — assets must equal sources!",
         "inv": {
           "stalna": "I FIXED ASSETS",
           "zemljiste": "1. Land",
@@ -1115,12 +1119,12 @@ const translations = {
         "thRb": "No.",
         "thAktiva": "Assets",
         "thPasiva": "Liabilities & equity",
-        "thIznos": "Amount in KM",
+        "thIznos": "Amount in {currency}",
         "totalAktiva": "TOTAL ASSETS (A+B):",
         "totalPasiva": "TOTAL LIABILITIES & EQUITY (A+B+C):",
         "badgeEmpty": "Enter balance sheet values",
         "badgeOk": "Balance sheet is balanced (Assets = Liabilities & equity) ✓",
-        "badgeDiff": "Balance sheet is NOT balanced! Assets ({aktiva}) ≠ Liabilities & equity ({pasiva}). Difference: {diff} KM",
+        "badgeDiff": "Balance sheet is NOT balanced! Assets ({aktiva}) ≠ Liabilities & equity ({pasiva}). Difference: {diff} {currency}",
         "sections": {
           "stalna": "A. FIXED ASSETS (1-3)",
           "kapital": "A. EQUITY (1-2)",
@@ -1159,7 +1163,7 @@ const translations = {
         "sub": "Enter planned revenue by product/service. Monthly plan × 12 should ≈ annual plan for 2026.",
         "thNum": "#",
         "thProizvod": "Product/Service",
-        "thCijena": "Unit price (KM)",
+        "thCijena": "Unit price ({currency})",
         "thMjesecni": "Monthly plan 2026",
         "thGodisnji": "Annual plan {year}",
         "phNaziv": "Name",
@@ -1172,7 +1176,7 @@ const translations = {
         "colMonthly": "Monthly level for 2026.",
         "colAnnual": "Annual level for 2026.",
         "totalRow": "TOTAL COSTS (1-5)",
-        "badge": "Mo. total ×12 = {expected} KM, Yr. total = {actual} KM",
+        "badge": "Mo. total ×12 = {expected} {currency}, Yr. total = {actual} {currency}",
         "cat": {
           "sectionMaterijalni": "1. Material costs",
           "sirovine": "Raw materials and supplies",
@@ -1194,7 +1198,7 @@ const translations = {
         "title": "4e. Financial plan: Depreciation schedule",
         "sub": "Enter fixed assets, acquisition value, and depreciation rate. Depreciation is calculated automatically (straight-line method).",
         "thOpis": "Asset description",
-        "thNabavna": "Acquisition value (KM)",
+        "thNabavna": "Acquisition value ({currency})",
         "thStopa": "Rate (%)",
         "thUkupno": "TOTAL",
         "phOpis": "e.g. Computer",
@@ -1202,7 +1206,7 @@ const translations = {
         "legalTitle": "Legally prescribed depreciation rates — Article 19.",
         "legal1": "(1) When determining the tax base, calculated depreciation is recognized using the straight-line method on long-term assets as prescribed by this article.",
         "legal2": "(2) Tax-recognized depreciation rates for long-term assets are:",
-        "legal4": "(4) If the acquisition price of an asset is less than 1,000.00 KM, its acquisition value may be fully written off in the year of acquisition.",
+        "legal4": "(4) If the acquisition price of an asset is less than 1,000.00 {currency}, its acquisition value may be fully written off in the year of acquisition.",
         "legal5": "(5) Long-term assets that are fully written off but still recorded until disposal or destruction cannot be revalued or depreciated for tax purposes.",
         "legalRows": [
           [
@@ -1250,13 +1254,13 @@ const translations = {
       "kredit": {
         "title": "4f. Financial plan: Loan repayment schedule",
         "initTitle": "Initial loan data",
-        "iznosLbl": "Loan amount (KM)",
+        "iznosLbl": "Loan amount ({currency})",
         "iznosTip": "Total loan amount.",
         "kamataLbl": "Interest (% annual)",
         "kamataTip": "Annual interest rate, e.g. 3.49%.",
         "rokLbl": "Repayment term (months)",
         "rokTip": "Total loan term in months, including grace period.",
-        "ucesceLbl": "Down payment (KM)",
+        "ucesceLbl": "Down payment ({currency})",
         "ucesceTip": "Own down payment amount (reduces loan principal).",
         "graceLbl": "Grace period (months)",
         "graceTip": "Period during which only interest is paid, no principal.",
@@ -1285,7 +1289,7 @@ const translations = {
         "sub": "Enter direct raw materials, unit of measure, unit cost, product names, and required quantity (norm) for each product.",
         "thSirovine": "Direct raw materials",
         "thJedMjere": "Unit",
-        "thCijena": "Unit cost (KM)",
+        "thCijena": "Unit cost ({currency})",
         "productNo": "Product No.{n}",
         "phProductName": "Product name",
         "deleteProduct": "Delete product",
@@ -1309,7 +1313,7 @@ const translations = {
         "rowNeto": "IV. NET PROFIT",
         "profitable": "Profitable",
         "loss": "Loss",
-        "badge": "{year}: {status} ({amount} KM)"
+        "badge": "{year}: {status} ({amount} {currency})"
       },
       "sazetak": {
         "title": "Summary & final check",
@@ -1421,7 +1425,7 @@ const translations = {
       "promocija": "Promotion & distribution channels",
       "partneri": "Key partners",
       "thSredstva": "Assets",
-      "thIznosKM": "Amount (KM)",
+      "thIznosKM": "Amount ({currency})",
       "thIzvori": "Sources",
       "stalnaSredstva": "I FIXED ASSETS",
       "tekucaSredstva": "II CURRENT ASSETS",
@@ -1431,27 +1435,27 @@ const translations = {
       "ukupnoIzvori": "TOTAL SOURCES",
       "thAktiva": "Assets",
       "thPasiva": "Liabilities & equity",
-      "thIznos": "Amount KM",
+      "thIznos": "Amount {currency}",
       "ukupnoAktiva": "TOTAL ASSETS",
       "ukupnoPasiva": "TOTAL LIABILITIES & EQUITY",
       "thNum": "#",
       "thProizvod": "Product/Service",
-      "thCijena": "Price (KM)",
+      "thCijena": "Price ({currency})",
       "thMjPlan": "Monthly plan 2026",
       "thGod2026": "Annual 2026",
       "ukupno": "UKUPNO",
       "thStruktura": "Cost structure",
       "ukupnoTroskovi": "TOTAL COSTS (1-5)",
       "thOpis": "Asset description",
-      "thNabavna": "Acquisition value (KM)",
+      "thNabavna": "Acquisition value ({currency})",
       "thStopa": "Rate (%)",
       "thUkupnoCol": "Total",
       "kreditNedefinisan": "Loan is not defined.",
-      "kreditSummary": "Loan amount: {iznos} KM | Down payment: {ucesce} KM | Principal: {osnovica} KM | Interest: {kamata}% p.a.",
+      "kreditSummary": "Loan amount: {iznos} {currency} | Down payment: {ucesce} {currency} | Principal: {osnovica} {currency} | Interest: {kamata}% p.a.",
       "kreditSummary2": "Term: {rok} mo. (grace {grace} mo.) | First payment date: {datum}",
-      "kreditSummary3": "Grace period payment: {graceRata} KM | Calculated payment: {rata} KM",
-      "kreditSummary4": "Total interest: {kamata} KM | ",
-      "kreditSummary5": "Total debt: {zaduzenje} KM",
+      "kreditSummary3": "Grace period payment: {graceRata} {currency} | Calculated payment: {rata} {currency}",
+      "kreditSummary4": "Total interest: {kamata} {currency} | ",
+      "kreditSummary5": "Total debt: {zaduzenje} {currency}",
       "thBr": "BR.",
       "thDatum": "Date",
       "thZaduzenje": "Opening balance",
@@ -1461,7 +1465,7 @@ const translations = {
       "thKumKamata": "Cum. interest",
       "thSirovina": "Raw material",
       "thJedMjere": "Unit",
-      "thCijenaJed": "Price/unit (KM)",
+      "thCijenaJed": "Price/unit ({currency})",
       "productNo": "Product No.{n}",
       "normativiTotal": "TOTAL MATERIAL COST PER PRODUCT",
       "thElementi": "Items",
@@ -1542,8 +1546,9 @@ export function LanguageProvider({ children }) {
   const setLang = useCallback((l) => setLangState(l === "en" ? "en" : "bs"), []);
 
   const t = useCallback((key, vars) => translate(translations[lang], key, vars), [lang]);
+  const currency = translations[lang].currency || (lang === "en" ? "EUR" : "KM");
 
-  const value = useMemo(() => ({ lang, setLang, t }), [lang, setLang, t]);
+  const value = useMemo(() => ({ lang, setLang, t, currency }), [lang, setLang, t, currency]);
 
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
 }
